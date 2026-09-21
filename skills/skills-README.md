@@ -2,9 +2,9 @@
 
 Cada archivo `SKILL.md` en esta carpeta documenta el estándar del equipo para un dominio técnico específico: cuándo usar qué herramienta, errores comunes reales (no solo "cómo se usa" superficial), y un checklist rápido al generar código. Los agentes en `/agents` las consultan de forma autónoma cuando una tarea las activa — no hace falta pedirlo explícitamente.
 
-## Nota de realineación (2026-08-30)
+## Nota de realineación (2026-09-21)
 
-Este proyecto **react-base-app** es un SPA (Vite + React + TanStack Router + Tailwind), **no** un proyecto Next.js/NestJS. Las skills de backend y las de charts/mapas de la lista original NO aplican a este repo y se marcaron como no activas. Las skills activas son las de la tabla siguiente; el resto quedan documentadas como "no aplica en este proyecto".
+Este proyecto **react-base-app** es un SPA (Vite + React + TanStack Router + Tailwind), **no** un proyecto Next.js/NestJS. Las skills de la plantilla original orientadas a un stack distinto (NestJS/Next.js/Nivo/Plotly/Leaflet/Kubernetes) se **eliminaron** de esta carpeta — no basta con marcarlas "no aplica" y dejarlas presentes, porque un agente puede terminar consultando un `.skill` que sigue ahí. Las 6 skills de la tabla siguiente son las únicas que existen físicamente en `/skills` y las únicas que los agentes deben consultar.
 
 ## Skills disponibles (activas en este proyecto)
 
@@ -17,17 +17,11 @@ Este proyecto **react-base-app** es un SPA (Vite + React + TanStack Router + Tai
 | `recharts-charts` | Gráficos con recharts y react-github-calendar — tema, accesibilidad | `frontend`, `designer`, `qa-tester` |
 | `ui-design-system` | Tokens de color blue, componentes UI, estados y contraste WCAG AA | `designer`, `frontend`, `qa-tester` |
 
-## Presentes pero NO aplican a este proyecto (no consumir)
+Cada una es un paquete `.skill` (zip con `<nombre>/SKILL.md` dentro) en esta misma carpeta — si una tabla de activación en `/agents` menciona una skill que no está en esta lista, es un error a corregir, no una skill "implícita".
 
-Las siguientes skills vienen de la plantilla original y están orientadas a un stack distinto (NestJS/Next.js/Nivo/Plotly/Leaflet). **No se consultan ni se aplican** salvo que el proyecto cambie de arquitectura:
+## Si el proyecto cambia de arquitectura
 
-- `nestjs-secure-backend`
-- `nextjs-2026-best-practices`
-- `nivo-professional-charts`
-- `plotly-expert-charts`
-- `leaflet-maps-integration`
-- `devops-docker-kubernetes`
-- `qa-qc-react-nestjs`
+Si en el futuro el proyecto incorpora un backend propio, Next.js, u otras librerías de gráficos/mapas, la skill correspondiente se agrega de nuevo siguiendo la convención de abajo — no se reintroducen las skills eliminadas "por si acaso" sin una necesidad real del proyecto.
 
 ## Cómo se activan
 

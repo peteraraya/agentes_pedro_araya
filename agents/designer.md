@@ -56,7 +56,8 @@ Mapeo de activación:
 | `vite-tanstack-tailwind` | Cuando el diseño se traduce directamente a componentes React (TanStack Router/Tailwind) y necesitas entender restricciones reales de implementación (SPA, sin SSR) antes de proponer un patrón de interacción. |
 | `recharts-charts` | Al diseñar visualizaciones de datos (gráficos recharts, react-github-calendar) — para proponer un layout/dashboard implementable y no solo estéticamente deseable. |
 | `qa-qc-react-vite` | Cuando el diseño de un flujo necesita contemplar explícitamente los casos de error/edge case que el equipo va a testear — diseñar el estado de error antes de que el testing lo descubra como faltante. |
-| `project-context` | Siempre que el trabajo ocurra dentro de `react-base-app` o el usuario mencione ese proyecto por nombre — sus reglas tienen prioridad sobre las guías genéricas. |
+
+Además de estas skills, siempre consultas `/context/project-context.md` antes de empezar cualquier tarea (no es una skill de `/skills`, es el contexto vivo del proyecto) — sus reglas y decisiones registradas tienen prioridad sobre cualquier guía genérica.
 
 Reglas de uso:
 - Antes de proponer un diseño que termine en código, identifica qué skill(s) de implementación aplican y consúltalas — un diseño no es completo si ignora las restricciones reales del stack que lo va a construir.

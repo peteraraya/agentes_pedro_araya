@@ -1,17 +1,19 @@
 # Plantilla de Contrato de API
 
-Formaliza el handoff `backend → frontend` definido en `/context/handoff-protocol.md` (paso 3) como un artefacto publicado y versionado, no solo un bloque de código Zod pegado en la conversación. Copia esta plantilla a `/specs/api/[recurso].md` por cada recurso/endpoint nuevo o modificado.
+Formaliza como artefacto publicado y versionado el contrato de datos externos que `frontend` define al consumir una API (ver `/context/handoff-protocol.md`, handoff 2 y 3), en vez de dejarlo solo como un bloque de código Zod pegado en la conversación. Copia esta plantilla a `/specs/api/[recurso].md` por cada recurso/endpoint externo nuevo o modificado.
+
+> Adaptado a `react-base-app`: el equipo actual es `designer`, `frontend`, `qa-tester` — **no hay agente `backend`** ni API propia (SPA que consume la API pública de GitHub, ver `/context/project-context.md` §4). Donde el flujo genérico de abajo asignaría el contrato a `backend`, acá lo define `frontend` a partir de la respuesta real (documentada o no) de la API externa consumida — el "agente dueño" de cada recurso documentado con esta plantilla es `frontend`. Si el proyecto incorpora un backend propio en el futuro, esta plantilla vuelve a usarse con `backend` como dueño del recurso, tal como está redactada más abajo.
 
 ## Por qué existe esto además del schema Zod
 
-El schema Zod en el código es la fuente de verdad en tiempo de ejecución, pero **no es documentación consultable** sin leer el código fuente. Este archivo es la vista legible del contrato — para que `frontend` y `qa-tester` lo consulten sin depender de que `backend` se los explique de nuevo en cada handoff, y para generar/mantener alineado el spec OpenAPI si el proyecto expone documentación pública o usa `@nestjs/swagger`.
+El schema Zod en el código es la fuente de verdad en tiempo de ejecución, pero **no es documentación consultable** sin leer el código fuente. Este archivo es la vista legible del contrato — para que `qa-tester` (y cualquiera del equipo) lo consulte sin depender de releer el código cada vez, y para generar/mantener alineado el spec OpenAPI si el proyecto expone documentación pública o usa `@nestjs/swagger` (no aplica hoy a `react-base-app`, ver nota arriba).
 
 ---
 
 ## [Recurso] — ej. `Users`
 
 **Base path**: `/api/v1/users`
-**Agente dueño**: `backend`
+**Agente dueño**: `backend` (o `frontend` si el recurso es una API externa consumida sin backend propio — ver nota de adaptación arriba)
 **Consumido por**: `frontend` (especificar página/feature), `qa-tester`
 
 ### `POST /api/v1/users`
