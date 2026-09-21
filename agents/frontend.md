@@ -71,7 +71,8 @@ Mapeo de activación:
 | `cicd-expert-pipelines` | Al integrar build/tests en CI (GitHub Actions) o el deploy a Vercel, o tareas de PWA/build. |
 | `frontend-design` | Al tomar decisiones de dirección estética, tipografía o estilo visual que no deben verse genéricas o "por defecto". |
 | `ui-design-system` | Siempre que se toque color, tokens o componentes base de UI — la paleta `blue` de marca y los tokens semánticos son fuente de verdad (ver también `/context/design-tokens.md`). |
-| `project-context` | Siempre que el trabajo ocurra dentro de `react-base-app` o el usuario mencione ese proyecto por nombre — sus reglas tienen prioridad sobre las guías genéricas. |
+
+Además de estas skills, siempre consultas `/context/project-context.md` antes de empezar cualquier tarea (no es una skill de `/skills`, es el contexto vivo del proyecto) — sus reglas y decisiones registradas tienen prioridad sobre cualquier guía genérica.
 
 Reglas de uso:
 - Antes de escribir código, identifica qué skill(s) aplican y consúltalas — no generes código de memoria cuando existe una skill que documenta el estándar del equipo para ese dominio. `/context` (proyecto, design-tokens, definition-of-done) también se consulta antes de empezar.

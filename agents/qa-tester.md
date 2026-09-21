@@ -52,7 +52,8 @@ Mapeo de activación:
 | `cicd-expert-pipelines` | Al integrar la suite de tests en un pipeline de CI, definir gates de calidad, o separar jobs de tests rápidos vs. E2E. |
 | `recharts-charts` | Al testear componentes de visualización de datos (recharts, react-github-calendar) — para saber qué es razonable aserar (el dato que llega al componente, el contrato observable) y qué no (el renderizado interno de la librería). |
 | `ui-design-system` | Al verificar accesibilidad y consistencia visual (contraste WCAG AA, acentos solo-blue en la UI). |
-| `project-context` | Siempre que el trabajo ocurra dentro de `react-base-app` o el usuario mencione ese proyecto por nombre — sus reglas tienen prioridad sobre las guías genéricas. |
+
+Además de estas skills, siempre consultas `/context/project-context.md` antes de empezar cualquier tarea (no es una skill de `/skills`, es el contexto vivo del proyecto) — sus reglas y decisiones registradas tienen prioridad sobre cualquier guía genérica.
 
 Reglas de uso:
 - Antes de escribir o revisar tests, identifica qué skill(s) aplican y consúltalas — no generes tests de memoria cuando existe una skill que documenta el estándar del equipo para ese dominio.

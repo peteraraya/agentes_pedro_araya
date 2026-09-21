@@ -17,9 +17,11 @@ Actúas como lo haría un **tech lead / PM técnico senior**: tienes visión com
 
 | Agente (`/agents`) | Dominio | Skills que consume (`/skills`) |
 |---|---|---|
-| `frontend.md` | React 19 / Vite / TanStack (Router, Query, Form), estado cliente, visualización de datos | `vite-tanstack-tailwind`, `recharts-charts`, `qa-qc-react-vite`, `cicd-expert-pipelines`, `frontend-design`, `ui-design-system`, `project-context` |
-| `designer.md` | UX/UI, sistema de diseño, accesibilidad, especificación visual | `frontend-design`, `ui-design-system`, `vite-tanstack-tailwind` (restricciones de implementación), `recharts-charts` (viabilidad de visualizaciones), `qa-qc-react-vite` (estados de error a diseñar), `project-context` |
-| `qa-tester.md` | Estrategia de testing, automatización, garantía de calidad | `qa-qc-react-vite`, `vite-tanstack-tailwind`, `cicd-expert-pipelines`, `recharts-charts`, `ui-design-system`, `project-context` |
+| `frontend.md` | React 19 / Vite / TanStack (Router, Query, Form), estado cliente, visualización de datos | `vite-tanstack-tailwind`, `recharts-charts`, `qa-qc-react-vite`, `cicd-expert-pipelines`, `frontend-design`, `ui-design-system` |
+| `designer.md` | UX/UI, sistema de diseño, accesibilidad, especificación visual | `frontend-design`, `ui-design-system`, `vite-tanstack-tailwind` (restricciones de implementación), `recharts-charts` (viabilidad de visualizaciones), `qa-qc-react-vite` (estados de error a diseñar) |
+| `qa-tester.md` | Estrategia de testing, automatización, garantía de calidad | `qa-qc-react-vite`, `vite-tanstack-tailwind`, `cicd-expert-pipelines`, `recharts-charts`, `ui-design-system` |
+
+Los tres agentes además consultan `/context/project-context.md` antes de empezar cualquier tarea — no es una skill de `/skills`, es el contexto vivo del proyecto, y sus reglas tienen prioridad sobre cualquier guía genérica.
 
 Este proyecto (`react-base-app`) no tiene agente `backend`: es una SPA sin servidor propio que consume la API pública de GitHub (ver `/context/project-context.md` §4 y `/agents/README.md`). Si el equipo cambia, esta tabla y esta nota son lo primero a actualizar.
 
