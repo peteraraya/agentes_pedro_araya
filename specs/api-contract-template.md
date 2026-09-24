@@ -2,7 +2,7 @@
 
 Formaliza como artefacto publicado y versionado el contrato de datos externos que `frontend` define al consumir una API (ver `/context/handoff-protocol.md`, handoff 2 y 3), en vez de dejarlo solo como un bloque de código Zod pegado en la conversación. Copia esta plantilla a `/specs/api/[recurso].md` por cada recurso/endpoint externo nuevo o modificado.
 
-> Adaptado a `react-base-app`: el equipo actual es `designer`, `frontend`, `qa-tester` — **no hay agente `backend`** ni API propia (SPA que consume la API pública de GitHub, ver `/context/project-context.md` §4). Donde el flujo genérico de abajo asignaría el contrato a `backend`, acá lo define `frontend` a partir de la respuesta real (documentada o no) de la API externa consumida — el "agente dueño" de cada recurso documentado con esta plantilla es `frontend`. Si el proyecto incorpora un backend propio en el futuro, esta plantilla vuelve a usarse con `backend` como dueño del recurso, tal como está redactada más abajo.
+> Adaptado a `react-base-app`: el equipo actual es `designer`, `frontend`, `qa-tester` — **no hay agente `backend`** ni API propia (SPA que consume la API pública de GitHub, ver `/context/project-context.md` §4 y `/agents/agents-README.md`). Donde el flujo genérico de abajo asignaría el contrato a `backend`, acá lo define `frontend` a partir de la respuesta real (documentada o no) de la API externa consumida — el "agente dueño" de cada recurso documentado con esta plantilla es `frontend`. Si el proyecto incorpora un backend propio en el futuro, esta plantilla vuelve a usarse con `backend` como dueño del recurso, tal como está redactada más abajo.
 
 ## Por qué existe esto además del schema Zod
 

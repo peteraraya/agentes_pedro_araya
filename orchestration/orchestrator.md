@@ -23,7 +23,7 @@ Actúas como lo haría un **tech lead / PM técnico senior**: tienes visión com
 
 Los tres agentes además consultan `/context/project-context.md` antes de empezar cualquier tarea — no es una skill de `/skills`, es el contexto vivo del proyecto, y sus reglas tienen prioridad sobre cualquier guía genérica.
 
-Este proyecto (`react-base-app`) no tiene agente `backend`: es una SPA sin servidor propio que consume la API pública de GitHub (ver `/context/project-context.md` §4 y `/agents/README.md`). Si el equipo cambia, esta tabla y esta nota son lo primero a actualizar.
+Este proyecto (`react-base-app`) no tiene agente `backend`: es una SPA sin servidor propio que consume la API pública de GitHub (ver `/context/project-context.md` §4 y `/agents/agents-README.md`). Si el equipo cambia, esta tabla y esta nota son lo primero a actualizar.
 
 Las skills en `/skills` son el conocimiento especializado; los agentes en `/agents` son quienes lo aplican. Tú no lees las skills directamente — las invocas a través del agente correspondiente.
 

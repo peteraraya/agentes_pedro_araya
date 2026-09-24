@@ -45,7 +45,7 @@ Este archivo es la **fuente única de verdad** que todos los agentes (`/agents`)
 ## 4. Restricciones de negocio conocidas
 
 - El azul es el color de marca único. Todo acento decorativo usa la paleta `blue` (ver `/context/design-tokens.md`). Colores semánticos solo para: `green` (éxito/online/completado), `red` (error/peligro), `amber/orange` (advertencia/en-progreso), y los mockups de código/sintaxis conservan su resaltado nativo.
-- No hay backend propio; el único consumo externo es la API pública de GitHub (perfil/stars). No inventar endpoints propios — el equipo de agentes es `designer`, `frontend`, `qa-tester` (sin agente `backend`, ver `/agents/README.md`).
+- No hay backend propio; el único consumo externo es la API pública de GitHub (perfil/stars). No inventar endpoints propios — el equipo de agentes es `designer`, `frontend`, `qa-tester` (sin agente `backend`, ver `/agents/agents-README.md`).
 
 ## 5. Decisiones de arquitectura registradas
 

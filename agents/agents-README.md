@@ -15,7 +15,7 @@ Para una tabla de responsabilidades más detallada (qué SÍ y qué NO le corres
 
 ## Cómo se relacionan con `/skills` y `/context`
 
-Ningún agente memoriza las mejores prácticas de su dominio — las consulta en `/skills` de forma autónoma cuando la tarea las activa. Ver el índice completo en [`/skills/README.md`](../skills/README.md).
+Ningún agente memoriza las mejores prácticas de su dominio — las consulta en `/skills` de forma autónoma cuando la tarea las activa. Ver el índice completo en [`/skills/skills-README.md`](../skills/skills-README.md).
 
 Además de `/skills`, los tres agentes consultan `/context` antes de empezar cualquier tarea: `project-context.md` (convenciones y decisiones del proyecto), `design-tokens.md` (paleta `blue` de marca y tokens semánticos — fuente de verdad para `designer` y `frontend`) y, si existe, `definition-of-done.md` para saber cuándo una entrega está realmente completa.
 
