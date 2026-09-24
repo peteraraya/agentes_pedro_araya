@@ -24,6 +24,8 @@ Copia/ubica este repositorio junto al proyecto objetivo y configura tu cliente d
 
 Después de este arranque, lee solo los archivos que tu tarea active (ver más abajo).
 
+> **¿Vas a trabajar con un proyecto distinto a `react-base-app`?** Antes del flujo anterior, lee [`ADAPTING.md`](./ADAPTING.md): dice qué archivos hay que modificar y en qué orden para adaptar el equipo a otro proyecto.
+
 ## Mapa de los archivos `.md` y sus conexiones
 
 | Carpeta | Contiene | Archivos `.md` | Se conecta a |
@@ -33,7 +35,7 @@ Después de este arranque, lee solo los archivos que tu tarea active (ver más a
 | `/roles` | Matriz de responsabilidades | `roles-matrix.md` | `/agents` (a quién corresponde cada dominio), `/orchestration` (flujo de decisión) |
 | `/skills` | Conocimiento especializado por dominio (paquetes `.skill`) | `skills-README.md` (índice) | `/agents` (tablas de activación: qué agente consume qué skill), `/context` (tokens y convenciones que las skills referencian) |
 | `/context` | Contexto vivo del proyecto (convenciones, tokens, protocolos) | `project-context.md`, `design-tokens.md`, `handoff-protocol.md`, `definition-of-done.md`, `pr-convention.md` | Todo el repo: **es la fuente de verdad que todos deben consultar** |
-| `/specs` | Especificaciones de features y plantillas | `feature-spec-template.md`, `api-contract-template.md`, `career-timeline.md` | `/context` (DoD y handoffs), `/agents` (qué agente construye el feature) |
+| `/specs` | Especificaciones de features y plantillas | `feature-spec-template.md`, `api-contract-template.md`, `career-timeline.md`, `portfolio-engagement.md`, `api/portfolio-engagement.md` | `/context` (DoD y handoffs), `/agents` (qué agente construye el feature) |
 
 ## Cómo se enlazan los `.md` entre sí (el flujo de trabajo)
 
@@ -67,10 +69,12 @@ specs/[feature].md ──► context/definition-of-done.md → "feature completa
 
 ## Al adaptar este repo a otro proyecto
 
-Si el proyecto objetivo no es `react-base-app`, antes de empezar a usarlo:
+Si el proyecto objetivo **no es `react-base-app`**, lee obligatoriamente [`ADAPTING.md`](./ADAPTING.md) **antes** de empezar. Es el documento único que define exactamente qué archivos tocar, en qué orden y qué se rompe si te saltas alguno, con tres perfiles según el tipo de proyecto (full-stack / frontend-only / otro stack de backend).
 
-1. Actualiza `context/project-context.md` con el stack, paleta y restricciones reales del nuevo proyecto — no dejes referencias a TanStack/Tailwind/NestJS/API de GitHub si no aplican.
-2. Revisa `skills/`: elimina las skills que no correspondan (fuente más común de inconsistencia), siguiendo `skills/skills-README.md`.
+Resumen de lo no negociable:
+
+1. Empieza por `context/project-context.md` — es la fuente de verdad; todo lo demás lo referencia.
+2. Revisa `skills/` (poda y alta, con `skills/skills-README.md` al día) y cada tabla de activación en `agents/` — la fuente más común de inconsistencia.
 3. Ajusta `roles/roles-matrix.md` y las notas de alcance en `agents/agents-README.md` y `orchestration/orchestrator.md`.
-4. Si el nuevo proyecto **no tiene backend**, reduce/adáptalo en `agents/backend.md` y revierte las notas full-stack en `specs/` y `context/handoff-protocol.md`.
-5. Actualiza `README.md` y `AGENTS.md` con la descripción del nuevo proyecto.
+4. Si el nuevo proyecto **no tiene backend** (perfil B), elimina/reduce `agents/backend.md` y revierte las notas full-stack en `specs/`, `context/handoff-protocol.md` y `context/definition-of-done.md`.
+5. Actualiza `README.md`, `AGENTS.md` y `ADAPTING.md`, y corre la checklist de verificación §5 de `ADAPTING.md` antes del primer uso.

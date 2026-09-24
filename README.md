@@ -1,4 +1,4 @@
-# Agentes de Pedro Araya — equipo de IA para `react-base-app`
+# Agentes de Pedro Araya 
 
 > Equipo de agentes de IA especializados para desarrollar el portafolio **`react-base-app`**: proyecto full-stack — frontend SPA de Vite + React 19 + TanStack (Router/Query/Form) + Tailwind y backend NestJS con API propia. No es una plantilla genérica — cada agente, skill y documento de contexto está adaptado a este proyecto.
 
@@ -26,7 +26,7 @@ Este repositorio define cómo trabaja un **equipo de agentes de IA** sobre `reac
 | Agentes | 5 (`orchestrator`, `frontend`, `backend`, `designer`, `qa-tester`) |
 | Skills | 13 paquetes `.skill` en `/skills` (9 activas en `react-base-app` + 4 disponibles para stack ampliado) |
 | Documentos de contexto | 5 en `/context` |
-| Especificaciones | 3 en `/specs` (1 feature completa: `career-timeline`) |
+| Especificaciones | 3 en `/specs` (2 features: `career-timeline` completa, `portfolio-engagement` en diseño) |
 | Licencia | MIT |
 
 La navegación completa de los archivos `.md` (mapa de conexiones, orden de lectura y reglas) vive en [`AGENTS.md`](./AGENTS.md) — es el punto de entrada para cualquier cliente de agentes.
@@ -52,7 +52,7 @@ Para saber a qué agente corresponde cada tipo de solicitud, ver la [matriz de r
 | [`/roles`](./roles/roles-matrix.md) | Matriz de responsabilidades — qué agente resuelve qué tipo de solicitud |
 | [`/skills`](./skills/skills-README.md) | Conocimiento especializado por dominio (`.skill`, paquetes con `SKILL.md`) que los agentes consultan de forma autónoma — stack full-stack + librerías alternativas |
 | [`/context`](./context/project-context.md) | Contexto vivo del proyecto: `project-context.md`, `design-tokens.md`, `handoff-protocol.md`, `definition-of-done.md`, `pr-convention.md` |
-| [`/specs`](./specs/feature-spec-template.md) | Plantillas y specs reales de features — incluye la [career timeline](./specs/career-timeline.md), completa y verificada |
+| [`/specs`](./specs/feature-spec-template.md) | Plantillas y specs reales de features — incluye la [career timeline](./specs/career-timeline.md) (completa) y el [portfolio engagement](./specs/portfolio-engagement.md) con su [contrato de API](./specs/api/portfolio-engagement.md) |
 
 ## Cómo se relacionan las piezas
 
@@ -91,13 +91,9 @@ Este repositorio se consume desde un cliente/orquestador de agentes de IA (ej. C
 
 ## Al adaptar este repo a otro proyecto
 
-Este equipo está fuertemente acoplado a `react-base-app` (stack, paleta de color, ausencia de backend). Si lo adaptas a otro proyecto:
+Este equipo está fuertemente acoplado a `react-base-app` (stack, paleta de color, backend propio). Si lo vas a usar con **otro proyecto**, la adaptación es obligatoria y está documentada en un solo lugar:
 
-1. **Actualiza `/context`** (`project-context.md`, `design-tokens.md`, `handoff-protocol.md`, `definition-of-done.md`, `pr-convention.md`) con el stack y convenciones reales del nuevo proyecto — no dejes referencias a TanStack/Tailwind/NestJS/API de GitHub si no aplican.
-2. **Revisa `/skills`**: elimina las skills que no correspondan y agrega las que falten, siguiendo [`skills/skills-README.md`](./skills/skills-README.md). No dejes una skill listada como "activa" que no exista físicamente, ni una skill presente que ningún agente use.
-3. **Ajusta `/roles` y las notas de alcance** en `agents/agents-README.md` y `orchestration/orchestrator.md`.
-4. Si el nuevo proyecto **no tiene backend**, reduce `agents/backend.md` (o adáptalo al stack real) y revierte las notas full-stack en `/specs` y `/context/handoff-protocol.md` que asumen APIs propias.
-5. Actualiza este README y `AGENTS.md` con la descripción real del nuevo proyecto.
+➡️ **[`ADAPTING.md`](./ADAPTING.md)** — mapa archivo por archivo (qué editar y qué se rompe si lo saltas), 3 perfiles de proyecto (full-stack / frontend-only / otro stack de backend), orden de edición y checklist de verificación pre-uso.
 
 ## Integridad del repositorio
 
