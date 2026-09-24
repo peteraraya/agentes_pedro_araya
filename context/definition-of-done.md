@@ -2,7 +2,7 @@
 
 Checklist único que el `orchestrator` usa para cerrar una feature o tarea como completa. Ninguna feature se marca `completa` en `/specs/[feature].md` si no cumple lo aplicable a su alcance. No todo ítem aplica a toda tarea (un fix puntual no pasa por `designer`), pero cuando aplica, es obligatorio — no una sugerencia.
 
-> Adaptado a `react-base-app`: SPA con Vite + React 19 + TanStack, **sin backend propio** (ver `/context/project-context.md`). No hay sección de "Backend" con DTOs/guards/migraciones porque no aplica a este proyecto — el equivalente es la validación de la API externa de GitHub, cubierto abajo.
+> Adaptado a `react-base-app`: proyecto **full-stack** — frontend SPA con Vite + React 19 + TanStack y backend NestJS con API propia (ver `/context/project-context.md`). Hay secciones para la API externa de GitHub, el backend propio, el frontend, diseño y testing; aplica la que corresponda al alcance de la tarea.
 
 ## Datos externos — API de GitHub (si la tarea consume o modifica ese consumo)
 
@@ -10,6 +10,17 @@ Checklist único que el `orchestrator` usa para cerrar una feature o tarea como 
 - [ ] Casos de fallo de la API contemplados explícitamente: 404 (usuario/repo inexistente), 403 (rate limit excedido), timeout, respuesta malformada
 - [ ] El fetch pasa por TanStack Query (caché, invalidation, reintentos configurados), nunca un `useEffect` con fetch a pelo
 - [ ] Sin llamadas reales a la API en tests — siempre mockeadas con MSW usando el mismo schema Zod como contrato
+
+## Backend propio — API NestJS (si la tarea tocó backend)
+
+- [ ] DTOs con validación estricta de entrada (`whitelist: true`, `forbidNonWhitelisted: true`) — nunca se confía en el shape de entrada sin validar
+- [ ] Autenticación y autorización separadas (guards de identidad vs. rol/ownership); rate limiting en endpoints sensibles
+- [ ] Manejo de errores que no filtra detalles internos (stack traces, mensajes del motor de DB) al cliente
+- [ ] Queries parametrizadas — sin concatenación de strings SQL; transacciones explícitas en operaciones multi-paso atómicas
+- [ ] Migraciones versionadas y revisadas; cambios destructivos con plan de reversión
+- [ ] Sin `any` implícito ni explícito sin justificación documentada
+- [ ] Contrato de la API documentado/actualizado en `/specs/api-contract-template.md` en el mismo PR que el código
+- [ ] Tests de integración/e2e con Supertest de los endpoints nuevos, con dependencias externas mockeadas (sin red real)
 
 ## Frontend (si la tarea tocó UI)
 

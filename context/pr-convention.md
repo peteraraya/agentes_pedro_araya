@@ -44,6 +44,7 @@ Ver `/specs/[archivo].md` (si aplica)
 
 ## Agentes involucrados
 - [ ] frontend
+- [ ] backend
 - [ ] designer
 - [ ] qa-tester
 
@@ -105,4 +106,4 @@ Quien revisa (el agente dueño del dominio si la tarea fue asignada por `orchest
 
 - Squash merge a `main` por defecto — historial limpio, un commit por PR con el mensaje final revisado.
 - Sin merges directos a `main` sin PR, incluso para cambios triviales — la protección de rama existe para eso.
-- El pipeline de CI (`cicd-expert-pipelines`) debe pasar en verde antes de habilitar el merge, sin excepciones manuales. El deploy a producción ocurre vía Vercel al mergear a `main`.
+- El pipeline de CI (`cicd-expert-pipelines`) debe pasar en verde antes de habilitar el merge, sin excepciones manuales. El deploy del frontend a producción ocurre vía Vercel al mergear a `main`; el del backend sigue su pipeline propio de contenedores (Docker/Kubernetes) no el de Vercel.

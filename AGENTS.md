@@ -2,7 +2,7 @@
 
 Este archivo es el **punto de entrada** para cualquier agente de IA (opencode, Claude Code, Cursor, etc.) que trabaje en un proyecto donde esté disponible este repositorio. Su propósito es explicar **cómo se conectan los archivos `.md`** de este repo: qué contiene cada carpeta, qué leer antes de empezar, y qué convenciones respetar.
 
-No es código de aplicación: este repositorio define un **equipo de agentes de IA especializados** (orquestador, frontend, diseño, QA) con sus skills, contexto vivo, roles y especificaciones, preparado para trabajar sobre un **proyecto objetivo** (por defecto, `react-base-app`).
+No es código de aplicación: este repositorio define un **equipo de agentes de IA especializados** (orquestador, frontend, backend, diseño, QA) con sus skills, contexto vivo, roles y especificaciones, preparado para trabajar sobre un **proyecto objetivo** (por defecto, `react-base-app`, full-stack: frontend Vite + backend NestJS).
 
 ## Cómo usar este repo en cualquier proyecto
 
@@ -28,7 +28,7 @@ Después de este arranque, lee solo los archivos que tu tarea active (ver más a
 
 | Carpeta | Contiene | Archivos `.md` | Se conecta a |
 |---|---|---|---|
-| `/agents` | Definiciones de cada agente del equipo | `agents-README.md` (índice), `frontend.md`, `designer.md`, `qa-tester.md` | `/orchestration` (coordinador), `/skills` (conocimiento que consumen), `/context` (reglas que respetan), `/roles` (a quién le toca qué) |
+| `/agents` | Definiciones de cada agente del equipo | `agents-README.md` (índice), `frontend.md`, `backend.md`, `designer.md`, `qa-tester.md` | `/orchestration` (coordinador), `/skills` (conocimiento que consumen), `/context` (reglas que respetan), `/roles` (a quién le toca qué) |
 | `/orchestration` | El agente coordinador y el runbook de incidentes | `orchestrator.md`, `incident-runbook.md` | `/agents` (a quién enruta), `/context` (reglas que hace respetar), `/specs` (cuándo una feature está completa) |
 | `/roles` | Matriz de responsabilidades | `roles-matrix.md` | `/agents` (a quién corresponde cada dominio), `/orchestration` (flujo de decisión) |
 | `/skills` | Conocimiento especializado por dominio (paquetes `.skill`) | `skills-README.md` (índice) | `/agents` (tablas de activación: qué agente consume qué skill), `/context` (tokens y convenciones que las skills referencian) |
@@ -47,7 +47,7 @@ orchestration/orchestrator.md      ──► clasifica la solicitud
         ├──► context/project-context.md reglas a respetar (prioridad máxima)
         │
         ▼
-agents/*.md (frontend | designer | qa-tester)
+agents/*.md (frontend | backend | designer | qa-tester)
         │
         ├──► skills/SKILL.md           conocimiento que ACTIVA la tarea
         │        (vía la tabla de activación del agente)
@@ -69,8 +69,8 @@ specs/[feature].md ──► context/definition-of-done.md → "feature completa
 
 Si el proyecto objetivo no es `react-base-app`, antes de empezar a usarlo:
 
-1. Actualiza `context/project-context.md` con el stack, paleta y restricciones reales del nuevo proyecto — no dejes referencias a TanStack/Tailwind/API de GitHub si no aplican.
+1. Actualiza `context/project-context.md` con el stack, paleta y restricciones reales del nuevo proyecto — no dejes referencias a TanStack/Tailwind/NestJS/API de GitHub si no aplican.
 2. Revisa `skills/`: elimina las skills que no correspondan (fuente más común de inconsistencia), siguiendo `skills/skills-README.md`.
 3. Ajusta `roles/roles-matrix.md` y las notas de alcance en `agents/agents-README.md` y `orchestration/orchestrator.md`.
-4. Actualiza `README.md` con la descripción del nuevo proyecto.
-5. Si el nuevo proyecto tiene backend propio, agrega `agents/backend.md` siguiendo la convención de `agents/agents-README.md`.
+4. Si el nuevo proyecto **no tiene backend**, reduce/adáptalo en `agents/backend.md` y revierte las notas full-stack en `specs/` y `context/handoff-protocol.md`.
+5. Actualiza `README.md` y `AGENTS.md` con la descripción del nuevo proyecto.

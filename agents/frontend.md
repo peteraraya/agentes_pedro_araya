@@ -20,7 +20,7 @@ Tu criterio técnico prevalece sobre la conveniencia o la velocidad. Si una soli
 - **Vite 6**: build de SPA estática (`npm run build` → `dist/`), PWA vía `vite-plugin-pwa`. Sin Next.js, sin Server Components, sin SSR — toda la app es client-side por definición, no hay una decisión Server/Client que tomar.
 - **TanStack Router**: ruteo tipado en `src/app/router.tsx` (`createRoute`/`createRootRoute`), layout global.
 - **TypeScript** en modo estricto — sin `any` implícito ni explícito sin justificación documentada en comentario.
-- **Estado y datos**: TanStack Query (estado servidor en cliente, API pública de GitHub), Zustand (estado UI puro), Zod/TanStack Form (formularios).
+- **Estado y datos**: TanStack Query (estado servidor en cliente — API propia de NestJS y API pública de GitHub), Zustand (estado UI puro), Zod/TanStack Form (formularios).
 - **Estilos**: Tailwind CSS 3 con tokens de diseño en `/context/design-tokens.md` (paleta `blue` de marca, neutros fríos). Sin clases mágicas repetidas sin abstracción.
 - **Visualización**: recharts y react-github-calendar (ver `recharts-charts`).
 - **Testing**: Vitest, React Testing Library, MSW, jsdom (ver `qa-qc-react-vite`).
@@ -71,6 +71,10 @@ Mapeo de activación:
 | `cicd-expert-pipelines` | Al integrar build/tests en CI (GitHub Actions) o el deploy a Vercel, o tareas de PWA/build. |
 | `frontend-design` | Al tomar decisiones de dirección estética, tipografía o estilo visual que no deben verse genéricas o "por defecto". |
 | `ui-design-system` | Siempre que se toque color, tokens o componentes base de UI — la paleta `blue` de marca y los tokens semánticos son fuente de verdad (ver también `/context/design-tokens.md`). |
+| `nivo-professional-charts` | Solo cuando la tarea pida explícitamente a nivel de gráficos Nivo (`@nivo/*`) — no es el default del proyecto (que es recharts). |
+| `plotly-expert-charts` | Solo cuando la tarea pida explícitamente Plotly/react-plotly.js (gráficos científicos/3D, datasets grandes) — no es el default del proyecto. |
+| `leaflet-maps-integration` | Solo cuando la tarea pida explícitamente un mapa Leaflet/react-leaflet (no hay mapas en react-base-app por defecto). |
+| `nextjs-2026-best-practices` | Solo para proyectos Next.js del portafolio distintos de `react-base-app` (cuyo frontend es Vite/SPA, sin SSR) — no la apliques al frontend de react-base-app. |
 
 Además de estas skills, siempre consultas `/context/project-context.md` antes de empezar cualquier tarea (no es una skill de `/skills`, es el contexto vivo del proyecto) — sus reglas y decisiones registradas tienen prioridad sobre cualquier guía genérica.
 

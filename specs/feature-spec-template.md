@@ -2,7 +2,7 @@
 
 Usada por el `orchestrator` al iniciar una feature multi-agente, y por `designer`/`frontend` al definir el punto de partida de un handoff (ver `/context/handoff-protocol.md`). Copia esta plantilla a un nuevo archivo por feature dentro de `/specs` (ej. `/specs/checkout-flow.md`) y complétala antes de asignar trabajo a los agentes.
 
-> Adaptado a `react-base-app`: el equipo actual es `designer`, `frontend`, `qa-tester` — **no hay agente `backend`** (SPA sin servidor propio, ver `/context/project-context.md` §4 y `/agents/agents-README.md`). La sección 4 ("Contrato de datos") es la única que cambia de dueño: en este proyecto no hay DTOs propios que definir, así que la completa `frontend` a partir del schema Zod que valida la respuesta de la API externa consumida (ver `/context/handoff-protocol.md`, handoff 2) — no se deja vacía ni se asigna a un agente que no existe en el equipo actual. Si el proyecto incorpora un backend propio en el futuro, esta sección vuelve a ser responsabilidad de `backend`.
+> Adaptado a `react-base-app`: el equipo es `designer`, `frontend`, `backend`, `qa-tester` — proyecto **full-stack**, ver `/context/project-context.md` §2 y §4 y `/agents/agents-README.md`. La sección 4 ("Contrato de datos") la define `backend` cuando la feature tiene datos propios (endpoints nuevos, entidades, DTOs) y se documenta en `/specs/api-contract-template.md`; si la feature solo consume la API externa de GitHub, el schema Zod lo define quien consuma el recurso (ver `/context/handoff-protocol.md`, handoff 5). No se deja vacía ni se asigna a un agente que no corresponde.
 
 ---
 
@@ -32,27 +32,29 @@ Usada por el `orchestrator` al iniciar una feature multi-agente, y por `designer
 - **Casos de error a contemplar**:
 - **Requisitos de accesibilidad específicos** (si hay algo más allá del estándar base):
 
-### 4. Contrato de datos (`frontend` — sin backend propio, ver nota arriba)
+### 4. Contrato de datos (`backend`, o quien consuma la API externa — ver nota arriba)
 
 ```ts
-// Schema Zod que valida la respuesta de la API externa consumida (ej. API de GitHub)
-// (o "no aplica" si la feature no consume/modifica datos externos)
+// API propia (backend): DTOs con validación, endpoints, request/response tipados
+// (o "no aplica" si la feature no involucra datos propios)
+// Documentado completo en /specs/api-contract-template.md
 
 // Response (éxito)
-// (schema Zod)
+// (schema/type)
 
 // Response (error)
-// (forma del error, códigos HTTP reales de la API externa: 404, 403 rate limit, etc.)
+// (forma del error, códigos HTTP reales de la API propia o externa: 404, 403 rate limit, etc.)
 ```
 
 - **Reglas de negocio/validación**:
-- **Casos de fallo de la API externa a contemplar** (404, 403/rate limit, timeout, respuesta malformada):
+- **Casos de fallo de la API (propia o externa) a contemplar** (404, 403/rate limit, timeout, respuesta malformada):
 
 ### 5. Implementación de UI (`frontend`)
 
 - **Componentes nuevos o modificados**:
 - **Estado cliente necesario** (Zustand) vs. **estado servidor** (TanStack Query):
-- **Dependencias de visualización** (recharts / react-github-calendar — ver skill `recharts-charts`), si aplica:
+- **Consumo del contrato**: si la feature usa la API propia, `frontend` consume el contrato que `backend` publicó (handoff `backend → frontend`), no inventa un shape distinto.
+- **Dependencias de visualización** (recharts / react-github-calendar — ver skill `recharts-charts`; Nivo/Plotly/Leaflet solo a pedido explícito), si aplica:
 
 ### 6. Criterios de aceptación (`qa-tester`)
 

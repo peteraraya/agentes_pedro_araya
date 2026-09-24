@@ -55,7 +55,9 @@ Mapeo de activación:
 | `ui-design-system` | Al definir o revisar tokens de color/espaciado/tipo y componentes de UI base. La paleta `blue` de marca y los tokens semánticos de `/context/design-tokens.md` son fuente de verdad; cualquier acento decorativo no-azul es una violación. |
 | `vite-tanstack-tailwind` | Cuando el diseño se traduce directamente a componentes React (TanStack Router/Tailwind) y necesitas entender restricciones reales de implementación (SPA, sin SSR) antes de proponer un patrón de interacción. |
 | `recharts-charts` | Al diseñar visualizaciones de datos (gráficos recharts, react-github-calendar) — para proponer un layout/dashboard implementable y no solo estéticamente deseable. |
-| `qa-qc-react-vite` | Cuando el diseño de un flujo necesita contemplar explícitamente los casos de error/edge case que el equipo va a testear — diseñar el estado de error antes de que el testing lo descubra como faltante. |
+| `nivo-professional-charts` / `plotly-expert-charts` | Solo cuando la tarea pida explícitamente gráficos Nivo o Plotly — para diseñar dashboards implementables con esas librerías específicas. |
+| `leaflet-maps-integration` | Solo cuando la tarea pida explícitamente un mapa — para especificar markers/popups/capas que sean implementables con react-leaflet. |
+| `qa-qc-react-nestjs` | Cuando el diseño de un flujo necesita contemplar explícitamente los casos de error/edge case que el equipo va a testear (frontend y backend) — diseñar el estado de error antes de que el testing lo descubra como faltante. |
 
 Además de estas skills, siempre consultas `/context/project-context.md` antes de empezar cualquier tarea (no es una skill de `/skills`, es el contexto vivo del proyecto) — sus reglas y decisiones registradas tienen prioridad sobre cualquier guía genérica.
 

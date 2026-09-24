@@ -16,16 +16,19 @@ Este archivo es la **fuente única de verdad** que todos los agentes (`/agents`)
 | Build | Vite 6 + esbuild | SPA estática, deploy en Vercel/PWA |
 | Frontend | React 19 + TypeScript estricto | Sin Next.js, sin Server Components |
 | Router | TanStack Router (`src/app/router.tsx`) | Rutas `createRoute`/`createRootRoute` — ver skill `vite-tanstack-tailwind` |
-| Datos cliente | TanStack Query (+ API de GitHub) | Estado servidor en cliente; sin backend propio |
+| Datos cliente | TanStack Query (+ API de GitHub y API propia) | Estado servidor en cliente |
 | Estado UI | Zustand (`src/stores/uiStore`) | Solo estado de UI puro |
 | Formularios | TanStack Form + @tanstack/zod-form-adapter | Validación con Zod |
-| Validación | Zod | Contrato de datos, incluida la respuesta de la API de GitHub |
+| Validación | Zod | Contrato de datos, incluida la respuesta de la API de GitHub y los DTOs consumidos de la API propia |
+| Backend | NestJS 10+ + TypeScript estricto | API propia modular; ver skill `nestjs-secure-backend` |
+| Base de datos | TypeORM o Prisma | Migraciones versionadas, transacciones, queries parametrizadas |
+| Infraestructura | Docker + Kubernetes | Contenedores de producción, deploy del backend; ver skill `devops-docker-kubernetes` |
 | Estilos | Tailwind CSS 3 | Tokens en `/context/design-tokens.md` — ver skill `ui-design-system` |
 | Tipografía | Newsreader (display), IBM Plex Mono (mono) | Fuentes via fontsource |
 | Animaciones | Framer Motion + CSS | `motion.div`, `AnimatePresence` |
 | Visualización | recharts, react-github-calendar | Ver skill `recharts-charts` |
 | 3D | react-three-fiber + drei + three | Elementos decorativos |
-| Testing | Vitest + RTL + MSW + jsdom + Playwright (E2E acotado) | Ver skill `qa-qc-react-vite` |
+| Testing | Vitest + RTL + MSW + jsdom + Playwright (E2E acotado); Jest + Supertest en backend | Ver skills `qa-qc-react-vite` y `qa-qc-react-nestjs` |
 | i18n | i18next + react-i18next | es/en |
 | CI/CD | GitHub Actions / Vercel | Ver skill `cicd-expert-pipelines` |
 
@@ -45,7 +48,8 @@ Este archivo es la **fuente única de verdad** que todos los agentes (`/agents`)
 ## 4. Restricciones de negocio conocidas
 
 - El azul es el color de marca único. Todo acento decorativo usa la paleta `blue` (ver `/context/design-tokens.md`). Colores semánticos solo para: `green` (éxito/online/completado), `red` (error/peligro), `amber/orange` (advertencia/en-progreso), y los mockups de código/sintaxis conservan su resaltado nativo.
-- No hay backend propio; el único consumo externo es la API pública de GitHub (perfil/stars). No inventar endpoints propios — el equipo de agentes es `designer`, `frontend`, `qa-tester` (sin agente `backend`, ver `/agents/agents-README.md`).
+- Hay **backend propio (NestJS)** que define la API que el frontend consume, y además el frontend (o backend) consume la API pública de GitHub. El contrato de la API propia lo define `backend` y se documenta con `/specs/api-contract-template.md`; el schema Zod de la API de GitHub lo define quien consuma el recurso (ver `/agents/agents-README.md`). No inventar endpoints ni contratos que no estén publicados en `/specs`.
+- Todo endpoint con datos sensibles o mutaciones lleva autenticación/autorización explícita y validación estricta de entrada — sin excepciones por ser un portafolio (ver skill `nestjs-secure-backend`).
 
 ## 5. Decisiones de arquitectura registradas
 
@@ -71,6 +75,11 @@ El orquestador agrega una entrada aquí cada vez que una tarea produce una decis
 - Deuda técnica: `period` en `cv.ts` es texto libre; el ordenamiento usa el primer `\d{4}` como heurística (fallback 0). Si en el futuro se estructura la fecha, `buildTimeline`/`sortByPeriodDesc` deben actualizarse en un solo lugar.
 - Convención de prueba: tests de JSX usan el docblock `// @vitest-environment jsdom` y mockean `react-i18next` (evita depender del init async de i18next en tests).
 **Agentes afectados**: designer, frontend, qa-tester.
+
+### [2026-09-24] Adopción de backend NestJS y equipo full-stack
+**Contexto**: el proyecto era una SPA sin servidor propio que consumía solo la API pública de GitHub. Se decidió incorporar un backend propio para exponer una API del portafolio (y opcionalmente proxyar/agregar valor sobre la API de GitHub), y el perfil del proyecto pasó de frontend a full-stack.
+**Decisión**: se incorpora el agente `backend` (NestJS + TypeScript estricto) al equipo de agentes, con base de datos TypeORM/Prisma y despliegue en contenedores (Docker/Kubernetes). El contrato de la API propia lo define `backend` y se documenta con `/specs/api-contract-template.md`; `frontend` lo consume vía TanStack Query. El frontend sigue siendo Vite/SPA (sin Next.js).
+**Agentes afectados**: backend (nuevo), frontend, designer, qa-tester, orchestrator.
 
 ## 6. Glosario del dominio
 

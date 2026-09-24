@@ -2,7 +2,7 @@
 
 Proceso operativo para cuando algo falla en producción. Complementa la teoría de resiliencia de `cicd-expert-pipelines` con el **procedimiento real de quién hace qué, en qué orden**, coordinado por `orchestrator`.
 
-> Adaptado a `react-base-app`: SPA estática desplegada en Vercel, **sin backend propio, sin Docker ni Kubernetes**. El equipo son 3 agentes (`designer`, `frontend`, `qa-tester`) — ver `/context/project-context.md`. Donde el runbook genérico asignaría un incidente de infraestructura a un agente `backend`/devops, acá lo asume `frontend` (es quien conoce el build de Vite y el consumo de la API de GitHub), y el rollback es el de Vercel, no un redeploy de imagen.
+> Adaptado a `react-base-app`: **full-stack** — frontend SPA (Vite) desplegado en Vercel + backend NestJS con base de datos e infraestructura de contenedores (ver `/context/project-context.md`). El equipo son 4 agentes (`designer`, `frontend`, `backend`, `qa-tester`). La API de GitHub se consume según cómo esté implementado: directo desde `frontend` o vía la API propia de `backend`. Los incidentes de infraestructura (contenedores, base de datos, deploys) los asume `backend`.
 
 ## Principio rector
 
@@ -26,15 +26,19 @@ En un incidente activo, **primero se restaura el servicio, después se investiga
 ### 2. Mitigación inmediata (antes de investigar la causa)
 Opciones en orden de preferencia según el caso:
 - **Rollback al deployment anterior en Vercel** — cada deploy queda versionado automáticamente; promover el deployment previo a producción es inmediato y no requiere rebuild.
+- **Redeploy de la versión anterior del container/imagen del backend** (o rollback de la migración que rompió datos) si el incidente es de la API propia — antes de corregir la migración, se restaura el estado previo.
 - **Feature flag / desactivar el widget o sección afectada** (ej. ocultar temporalmente un componente que depende de la API de GitHub si esta empieza a fallar) si el resto del sitio puede seguir operando sin él.
 - Si el secreto/token expuesto es la causa (SEV1), **revocar y rotar el secreto de inmediato**, independientemente de si ya se hizo rollback — un rollback de código no invalida un secreto ya filtrado en el historial de git.
 - Se documenta la acción tomada y la hora exacta — es el primer insumo del post-mortem.
 
 ### 3. Asignación al agente responsable
 `orchestrator` identifica el dominio del incidente y asigna diagnóstico al agente dueño:
-- Error de consumo/validación de la API de GitHub (datos) → `frontend`
+- Error de consumo/validación de la API de GitHub (datos) → `frontend` (si consume directo) o `backend` (si lo proxya)
 - Error de renderizado/UI/performance de carga → `frontend`
-- Falla de build o del pipeline de despliegue (Vercel/GitHub Actions) → `frontend` (con la skill `cicd-expert-pipelines`)
+- Falla de la API propia, endpoints, validación, o autenticación → `backend`
+- Falla de base de datos, migraciones, o integridad de datos → `backend`
+- Falla de contenedores/Kubernetes/deploy de backend, o del pipeline de despliegue → `backend` (con la skill `devops-docker-kubernetes` / `cicd-expert-pipelines`)
+- Falla de build o del pipeline de despliegue del frontend (Vercel/GitHub Actions) → `frontend`
 - Un estado de error/vacío que nunca se diseñó y ahora causa una pantalla rota → `designer` (gap de especificación) + `frontend` (implementación del fix)
 - Confirmación de que el incidente está resuelto y no regresó → `qa-tester`
 
@@ -66,6 +70,6 @@ El post-mortem se registra en `/context/project-context.md` (sección "Decisione
 - [ ] ¿Se declaró la severidad y se activó el flujo de incidente?
 - [ ] ¿Se mitigó (rollback de deploy / feature flag / rotación de secreto) antes de buscar la causa raíz?
 - [ ] ¿Se documentó la hora exacta de cada acción tomada?
-- [ ] ¿Se asignó al agente dueño del dominio (`frontend`, o `designer` si es un gap de especificación), no al primero disponible?
+- [ ] ¿Se asignó al agente dueño del dominio (`backend` para API/DB/infra, `frontend` para UI/build front, o `designer` si es un gap de especificación), no al primero disponible?
 - [ ] ¿`qa-tester` validó que el sitio está realmente estable en producción, no solo "parece estar bien"?
 - [ ] ¿Se programó el post-mortem si es SEV1/SEV2?

@@ -7,21 +7,22 @@ Cada archivo en esta carpeta define la personalidad y las pautas operativas de u
 | Archivo | Rol | Cuándo invocarlo directamente |
 |---|---|---|
 | [`orchestrator.md`](../orchestration/orchestrator.md) | Tech lead / coordinador | Cuando la tarea no está claramente acotada a un solo dominio, o involucra a más de un agente en secuencia |
-| [`frontend.md`](./frontend.md) | Ingeniero Senior de Frontend (React/TanStack/Vite) | Componentes, estado cliente, ruteo, visualización de datos, consumo de API (GitHub) |
+| [`frontend.md`](./frontend.md) | Ingeniero Senior de Frontend (React/TanStack/Vite) | Componentes, estado cliente, ruteo, visualización de datos, consumo de APIs |
+| [`backend.md`](./backend.md) | Ingeniero Senior de Backend (NestJS) | Endpoints, DTOs/validación, autenticación/autorización, base de datos, contratos de API propios, infraestructura/despliegue |
 | [`designer.md`](./designer.md) | Diseñador Senior UX/UI | Flujo de usuario, sistema de diseño, especificación de estados, accesibilidad |
 | [`qa-tester.md`](./qa-tester.md) | QA Engineer Senior | Estrategia de testing, automatización, reportes de bugs, gates de calidad |
 
 Para una tabla de responsabilidades más detallada (qué SÍ y qué NO le corresponde a cada uno) y la matriz de decisión "¿a quién le corresponde esto?", ver [`/roles/roles-matrix.md`](../roles/roles-matrix.md).
 
-## Cómo se relacionan con `/skills` y `/context`
+### Cómo se relacionan los agentes entre sí
 
 Ningún agente memoriza las mejores prácticas de su dominio — las consulta en `/skills` de forma autónoma cuando la tarea las activa. Ver el índice completo en [`/skills/skills-README.md`](../skills/skills-README.md).
 
-Además de `/skills`, los tres agentes consultan `/context` antes de empezar cualquier tarea: `project-context.md` (convenciones y decisiones del proyecto), `design-tokens.md` (paleta `blue` de marca y tokens semánticos — fuente de verdad para `designer` y `frontend`) y, si existe, `definition-of-done.md` para saber cuándo una entrega está realmente completa.
+Además de `/skills`, los agentes consultan `/context` antes de empezar cualquier tarea: `project-context.md` (convenciones y decisiones del proyecto), `design-tokens.md` (paleta `blue` de marca y tokens semánticos — fuente de verdad para `designer` y `frontend`), `handoff-protocol.md` (cómo se pasa trabajo de un agente a otro) y, si existe, `definition-of-done.md` para saber cuándo una entrega está realmente completa.
 
 ## Nota de alcance del proyecto
 
-Este equipo está configurado para `react-base-app`: una **SPA construida con Vite (sin Next.js, sin SSR)** que consume la API pública de GitHub y **no tiene backend propio**. Por eso no hay un agente de backend en esta carpeta — si el proyecto lo incorpora en el futuro, agrega `backend.md` siguiendo la convención de abajo y actualiza esta nota.
+Este equipo está configurado para **`react-base-app`, un proyecto full-stack**: frontend **SPA con Vite (sin Next.js, sin SSR)** que consume la API pública de GitHub y la API propia del backend **NestJS** (con base de datos TypeORM/Prisma, contenedores Docker y deploys a Vercel/plataforma de contenedores). Por eso el equipo tiene un agente `backend` — no es solo frontend.
 
 ## Convención al agregar un nuevo agente
 
