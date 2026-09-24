@@ -65,6 +65,7 @@ specs/[feature].md ──► context/definition-of-done.md → "feature completa
 - **No inventes archivos.** Solo existe lo que está físicamente en `agents/`, `skills/`, `context/`, `roles/`, `specs/` y `orchestration/`. Si una tabla menciona un archivo que no existe, es un error a corregir, no un archivo implícito.
 - **Las skills se activan, no se leen por defecto.** Un agente consulta una skill de `skills/` solo cuando su tabla de activación la dispara. No leas todo `/skills` en cada tarea.
 - **El trabajo se pasa con handoffs explícitos** (`context/handoff-protocol.md`), nunca de forma implícita o resumida.
+- **Los workflows son genéricos; lo específico vive en `/context` y en `## Parámetros del proyecto` de cada skill.** Ningún workflow (skill, agente, orquestador) debe hardcodear valores del proyecto (stack, versiones, colores, fuentes, endpoints, comandos) — al adaptar a otro proyecto se editan los parámetros y el contexto, no los cuerpos de las skills (ver `ADAPTING.md`).
 - **No confundas el repositorio de agentes con el proyecto objetivo.** Este repo describe al equipo; el proyecto objetivo es el código sobre el que se trabaja. Edita el código del proyecto objetivo, y este repo solo cuando cambie el equipo, sus skills o sus convenciones.
 
 ## Al adaptar este repo a otro proyecto
@@ -77,4 +78,5 @@ Resumen de lo no negociable:
 2. Revisa `skills/` (poda y alta, con `skills/skills-README.md` al día) y cada tabla de activación en `agents/` — la fuente más común de inconsistencia.
 3. Ajusta `roles/roles-matrix.md` y las notas de alcance en `agents/agents-README.md` y `orchestration/orchestrator.md`.
 4. Si el nuevo proyecto **no tiene backend** (perfil B), elimina/reduce `agents/backend.md` y revierte las notas full-stack en `specs/`, `context/handoff-protocol.md` y `context/definition-of-done.md`.
-5. Actualiza `README.md`, `AGENTS.md` y `ADAPTING.md`, y corre la checklist de verificación §5 de `ADAPTING.md` antes del primer uso.
+5. En cada skill que adaptes, edita sus valores únicamente en la sección `## Parámetros del proyecto` (y en los archivos de `/context` que referencie) — nunca el cuerpo del workflow; si algo quedó hardcodeado en un cuerpo está violando el principio de abstracción y se arregla, no se propaga.
+6. Actualiza `README.md`, `AGENTS.md` y `ADAPTING.md`, y corre la checklist de verificación §5 de `ADAPTING.md` antes del primer uso.

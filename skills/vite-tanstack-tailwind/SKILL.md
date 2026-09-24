@@ -1,6 +1,6 @@
 ---
 name: vite-tanstack-tailwind
-description: Guía técnica del stack Vite + React 19 + TanStack Router/Query/Form + Tailwind CSS 3 para SPA client-side sin Next.js ni SSR (stack actual de react-base-app — los valores del proyecto están en los Parámetros del proyecto). Úsala siempre que la tarea implique ruteo (TanStack Router), estado de datos servidor/cliente (TanStack Query/Zustand/Form), configuración de build (Vite, PWA), o estilos con Tailwind. También aplica al revisar restricciones reales de implementación antes de proponer un patrón de interacción o al escribir/depurar código de componentes, hooks o rutas.
+description: Guía técnica del stack Vite + React 19 + TanStack Router/Query/Form + Tailwind CSS 3 para SPA client-side sin Next.js ni SSR (stack actual del proyecto objetivo — los valores del proyecto están en los Parámetros del proyecto). Úsala siempre que la tarea implique ruteo (TanStack Router), estado de datos servidor/cliente (TanStack Query/Zustand/Form), configuración de build (Vite, PWA), o estilos con Tailwind. También aplica al revisar restricciones reales de implementación antes de proponer un patrón de interacción o al escribir/depurar código de componentes, hooks o rutas.
 ---
 
 # Stack de implementación — Vite + React + TanStack + Tailwind (SPA client-side)
@@ -40,7 +40,7 @@ Referencia técnica del stack definido en los **Parámetros del proyecto** (abaj
 
 - Todo fetch pasa por TanStack Query (hooks tipados), nunca un `useEffect` con `fetch` a pelo — caché, invalidación y reintentos configurados de forma centralizada.
 - Toda respuesta de la API se valida con un **schema Zod propio** antes de usarse en la UI — la API externa (Parámetros) es la fuente de verdad en runtime, pero su forma real (campos ausentes en ciertos perfiles, límites de paginación) no es 100% la documentada; el schema es lo que realmente protege al componente.
-- Casos de fallo a contemplar siempre: `404` (usuario/repo inexistente), `403` (rate limit de la API pública sin autenticar), timeout, respuesta malformada — un hook nuevo que consume GitHub sin manejar estos casos no está completo (ver `qa-qc-react-vite` para cómo se testean).
+- Casos de fallo a contemplar siempre: `404` (usuario/repo inexistente), `403` (rate limit de la API pública sin autenticar), timeout, respuesta malformada — un hook nuevo que consume la API externa (ver Parámetros) sin manejar estos casos no está completo (ver `qa-qc-react-vite` para cómo se testean).
 - No hay contrato de API propio que coordinar entre agentes: `frontend` define el schema Zod directamente a partir de la respuesta real de la API externa (ver `/context/handoff-protocol.md`, handoff 2).
 
 ## 4. Estado UI — Zustand

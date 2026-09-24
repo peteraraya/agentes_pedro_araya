@@ -1,29 +1,41 @@
 ---
 name: qa-qc-react-vite
-description: Estrategia de testing para react-base-app — Vitest, React Testing Library, MSW, jsdom y Playwright (E2E acotado) sobre una SPA Vite/React/TanStack sin backend propio que consume la API pública de GitHub. Úsala siempre que la tarea implique escribir o revisar tests unitarios/integración/E2E, configurar mocks de la API de GitHub con MSW, definir cobertura o estrategia de testing, o cuando el usuario pida que el código esté "bien probado" o "sin regresiones".
+description: Estrategia de testing de una SPA Vite/React/TanStack — Vitest, React Testing Library, MSW, jsdom y Playwright (E2E acotado), sin backend propio, que consume una API externa (los detalles del proyecto están en los Parámetros del proyecto). Úsala siempre que la tarea implique escribir o revisar tests unitarios/integración/E2E, configurar mocks de una API externa con MSW, definir cobertura o estrategia de testing, o cuando el usuario pida que el código esté "bien probado" o "sin regresiones".
 ---
 
-# Testing — react-base-app (Vitest + RTL + MSW + Playwright)
+# Testing — SPA Vite/React (Vitest + RTL + MSW + Playwright)
 
-Estrategia de testing para una **SPA sin backend propio**: no hay endpoints propios que testear, el "contrato" a verificar es la respuesta real (o mockeada) de la API pública de GitHub. Prioriza integration tests (componente + MSW) sobre una suite E2E extensa.
+Estrategia de testing para una **SPA sin backend propio**: no hay endpoints propios que testear, el "contrato" a verificar es la respuesta real (o mockeada) de la API externa del proyecto (ver Parámetros). Prioriza integration tests (componente + MSW) sobre una suite E2E extensa.
+
+## Parámetros del proyecto — react-base-app (a editar al adaptar)
+
+> Los únicos valores específicos de esta skill. Al adaptar a otro proyecto se editan estos parámetros (y los archivos de `/context` que referencian), no el cuerpo de la skill.
+
+| Parámetro | Valor actual (`react-base-app`) |
+|---|---|
+| Aplicación | SPA Vite + React 19 + TanStack (Router/Query), sin backend propio |
+| API externa a mockear | Pública de GitHub (contrato validado con schema Zod definido por `frontend`) |
+| Flujos E2E críticos | Análisis de un perfil de GitHub; flujo de contacto |
+| Ejemplos de helpers puros | `buildTimeline`, `sortByPeriodDesc` (feature career timeline) |
+| i18n en tests | `react-i18next` se mockea (su init asíncrono real causa flaky tests) |
 
 ## 1. Pirámide de testing de este proyecto
 
 ```
-       E2E (Playwright)         ← acotado a los flujos críticos (ej. análisis de perfil GitHub)
+       E2E (Playwright)         ← acotado a los flujos críticos (ver Parámetros)
    Integración (RTL + MSW)      ← la mayoría de la cobertura útil vive acá
 Unitarios (Vitest, funciones puras)  ← helpers, schemas Zod, lógica de derivación
 ```
 
-- E2E se justifica en el puñado de flujos donde el costo de un fallo real (frente a un reclutador viendo el sitio) es alto — no como cobertura por defecto de cada pantalla.
-- Un helper puro (ej. `buildTimeline`, `sortByPeriodDesc` en la feature de career timeline) se testea unitariamente sin montar ningún componente — es más rápido y señala exactamente dónde está el bug si falla.
+- E2E se justifica en el puñado de flujos donde el costo de un fallo real (frente a la audiencia real del producto) es alto — no como cobertura por defecto de cada pantalla.
+- Un helper puro (ver ejemplos en Parámetros) se testea unitariamente sin montar ningún componente — es más rápido y señala exactamente dónde está el bug si falla.
 
-## 2. Mocks de la API de GitHub con MSW
+## 2. Mocks de la API externa con MSW
 
 - **Nunca llamadas reales a la API en tests** — siempre mockeadas con MSW, usando el mismo schema Zod que `frontend` define en runtime como contrato del mock (si el mock no respeta el schema real, el test certifica un contrato que el código no valida de verdad).
 - Casos de fallo de la API que todo hook/componente que la consume debe tener cubiertos en tests:
-  - `404` — usuario o repositorio inexistente.
-  - `403` — rate limit excedido (la API pública de GitHub sin autenticar tiene un límite bajo; es el caso real más probable de fallo en producción).
+  - `404` — recurso inexistente (usuario/repositorio).
+  - `403` — rate limit excedido (una API pública sin autenticar tiene un límite bajo; es el caso real más probable de fallo en producción).
   - Timeout / sin conexión.
   - Respuesta malformada o con campos ausentes (la API real no siempre coincide 1:1 con lo documentado).
 - Un componente que solo tiene test del caso feliz (200 con datos completos) no está cubierto — el caso feliz lo escribe cualquiera, encontrar dónde se rompe es el valor del testing.
@@ -44,7 +56,7 @@ Unitarios (Vitest, funciones puras)  ← helpers, schemas Zod, lógica de deriva
 ## 5. Un test flaky es un bug
 
 - Si un test falla intermitentemente sin cambios de código, se investiga la causa raíz (timing, orden de tests, mock de red mal configurado) — nunca se resuelve reintentando ni se silencia con `skip`.
-- La causa más común en este proyecto: un mock de MSW no reseteado entre tests, o una animación de Framer Motion no desactivada en el entorno de test que introduce timing real.
+- La causa más común: un mock de MSW no reseteado entre tests, o una animación (ej. Framer Motion) no desactivada en el entorno de test que introduce timing real.
 
 ## 6. Cobertura con criterio
 
@@ -54,11 +66,11 @@ Unitarios (Vitest, funciones puras)  ← helpers, schemas Zod, lógica de deriva
 
 ## 7. E2E con Playwright — cuándo sí
 
-- Reservado a flujos donde el fallo real importa (ej. el recorrido completo de análisis de un perfil de GitHub, el flujo de contacto). No se exige por defecto en cada cambio de UI — ver `/context/definition-of-done.md`.
+- Reservado a los flujos donde el fallo real importa (ver Parámetros). No se exige por defecto en cada cambio de UI — ver `/context/definition-of-done.md`.
 
 ## 8. Checklist rápido al escribir/revisar tests
 
-- [ ] ¿Están cubiertos los casos negativos de la API de GitHub (`404`, `403`/rate limit, timeout, respuesta malformada), no solo el `200` feliz?
+- [ ] ¿Están cubiertos los casos negativos de la API externa (`404`, `403`/rate limit, timeout, respuesta malformada), no solo el `200` feliz?
 - [ ] ¿Los mocks de MSW respetan el mismo schema Zod que valida `frontend` en runtime?
 - [ ] ¿Se testea comportamiento observable (`getByRole`) y no implementación interna?
 - [ ] ¿Están cubiertos loading/error/vacío/éxito en componentes con fetch?

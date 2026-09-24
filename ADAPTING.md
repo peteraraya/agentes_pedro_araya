@@ -29,6 +29,10 @@ Este repo describe un **equipo de agentes** (orquestador, frontend, backend, dis
 
 El criterio jamás falla: **si un agente debe pensar en un stack distinto, todo lo que le dice qué stack usar debe actualizarse.** Lo que olvides en esa cadena seguirá diciéndole al agente que trabaje con el proyecto anterior.
 
+### Skills: capa de metodología reutilizable
+
+Los cuerpos de las skills son **workflows genéricos** (criterio de uso, decisiones, checklists) con una sección `## Parámetros del proyecto` al inicio donde viven los únicos valores específicos. Por eso adaptar `skills/` es casi siempre **podar/agregar más que reescribir**: lo específico se edita en los parámetros y en `/context` (paleta, tokens, stack), no en el workflow. Si una skill quedó hardcodeada con un proyecto, se arregla moviendo el valor a parámetros — no se propaga el hardcode a otra copia.
+
 ## 2. Mapa maestro
 
 Leyenda de columnas:
@@ -50,7 +54,7 @@ Leyenda de columnas:
 | `orchestration/orchestrator.md` | 🟡 | Notas full-stack (flujo designer→backend→frontend→qa, dueño de contratos de API) | Coordina flujos que incluyen un backend que no existe o con otro stack |
 | `orchestration/incident-runbook.md` | ⚪ | (genérico — incidentes, no stack) | Casi nunca se toca |
 | `skills/skills-README.md` | 🔴 | Tabla de skills activas/disponibles y qué agente las consume | Skills huérfanas o "activas" que no existen → inconsistencias en cada tarea |
-| `skills/<nombre>/SKILL.md` | 🟡 | **Podar**: borrar las que no aplican al stack, agregar las que falten | Skills muertas que los agentes activan porque siguen listadas. Es la fuente #1 de inconsistencia |
+| `skills/<nombre>/SKILL.md` | 🟡 | **Podar** (borrar las que no aplican al stack, agregar las que falten) y, en las que quedan, editar **solo** su sección `## Parámetros del proyecto` (y los archivos de `/context` que referencian) — nunca el cuerpo del workflow | Skills muertas que los agentes activan porque siguen listadas (fuente #1 de inconsistencia); o skills cuyo workflow quedó hardcodeado con el proyecto anterior porque se editaron los cuerpos en vez de los parámetros |
 | `context/design-tokens.md` | 🟡 | Paleta `blue` y tokens (si el proyecto no usa esta marca/sistema) | La UI sale pintada con la marca del portafolio anterior |
 | `context/handoff-protocol.md` | 🟡 | Los 6 handoffs (si no hay backend: quitar `designer→backend` y `backend→frontend`) | El equipo pasa trabajo a agentes inexistentes o con contratos de API propias que nadie define |
 | `context/definition-of-done.md` | 🟡 | Checklist "Backend propio" (perfil B) o adaptarlo al nuevo stack | Las entregas se consideran incompletas/incorrectas contra un backend que no aplica |
@@ -98,7 +102,7 @@ Orden de edición recomendado (no lo cambies — cada paso certifica que el ante
 
 1. **Define el perfil** (A/B/C) y anótalo.
 2. **`context/project-context.md`**: producto, stack, restricciones, glosario, proyectos. Este archivo es la fuente de verdad; todo lo demás lo referencia.
-3. **`skills/`**: poda las carpetas `<nombre>/SKILL.md` que no apliquen y agrega las que falten; deja `skills-README.md` exacto.
+3. **`skills/`**: poda las carpetas `SKILL.md` que no apliquen y agrega las que falten; en las que se quedan, actualiza su sección `## Parámetros del proyecto` (nunca el cuerpo del workflow) y los archivos de `/context` que referencian; deja `skills-README.md` exacto.
 4. **`agents/`**: `agents-README.md`, `frontend.md`, y según perfil `backend.md`/`designer.md`/`qa-tester.md` — cada tabla de activación apuntando solo a skills que existen.
 5. **`roles/roles-matrix.md`** y **`orchestration/orchestrator.md`**: composición del equipo y flujo reales.
 6. **Reversión full-stack** (solo perfil B): `handoff-protocol.md`, `definition-of-done.md`, `pr-convention.md`.
@@ -139,3 +143,4 @@ Busca con tu editor/ripgrep sobre `*.md` (excluyendo `.git`). Cero coincidencias
 - **Dejar specs de features del portafolio** (`career-timeline`, `portfolio-engagement`) como si fueran plantilla genérica: contaminan la idea de "qué features va a tener mi proyecto".
 - **Activar skills "disponibles"** (Next.js, Nivo, Plotly, Leaflet) como default en el frontend nuevo sin revisar el `frontend.md`: solo deben activarse a pedido explícito.
 - **No actualizar los counts** (`README`/`AGENTS`): el repo declara 5 agentes / 14 skills que ya no cuadran.
+- **Editar el cuerpo de una skill para adaptarla** cuando el cambio es de valores (stack, colores, endpoint, comandos): los workflows son genéricos y lo específico vive en `## Parámetros del proyecto` y `/context`. Si te encuentras hardcodeando el nombre de un proyecto en un workflow, estás violando el principio de abstracción — arregla la skill moviendo el valor a parámetros, no lo propagues.

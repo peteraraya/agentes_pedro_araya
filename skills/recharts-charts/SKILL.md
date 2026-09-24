@@ -1,25 +1,38 @@
 ---
 name: recharts-charts
-description: Guía para gráficos y visualizaciones de datos en react-base-app con recharts y react-github-calendar (stats de perfil, calendario de contribuciones, dashboards del CV). Úsala siempre que la tarea implique crear o revisar un gráfico, elegir el tipo de visualización correcto, definir tema/colores de un chart, o testear/diseñar un componente de visualización de datos de esta SPA.
+description: Guía para gráficos y visualizaciones de datos con recharts y react-github-calendar. Los valores de tema, fuente de datos y stack del proyecto están en los Parámetros del proyecto. Úsala siempre que la tarea implique crear o revisar un gráfico, elegir el tipo de visualización correcto, definir tema/colores de un chart, o testear/diseñar un componente de visualización de datos.
 ---
 
-# Visualización de datos — recharts + react-github-calendar (react-base-app)
+# Visualización de datos — recharts + react-github-calendar
 
-Guía de decisiones reales para las dos librerías de visualización activas en este proyecto: **recharts** (gráficos de stats de GitHub — lenguajes, actividad, métricas de impacto) y **react-github-calendar** (calendario de contribuciones). No es documentación genérica de la API de recharts — es el criterio del equipo para que un gráfico nuevo sea legible, accesible y coherente con el resto del producto.
+Guía de decisiones reales para las dos librerías de visualización del proyecto (ver Parámetros): **recharts** (gráficos de métricas del perfil) y **react-github-calendar** (calendario de contribuciones). No es documentación genérica de la API de recharts — es el criterio del equipo para que un gráfico nuevo sea legible, accesible y coherente con el resto del producto.
+
+## Parámetros del proyecto — react-base-app (a editar al adaptar)
+
+> Los únicos valores específicos de esta skill. Al adaptar a otro proyecto se editan estos parámetros (y los archivos de `/context` que referencian), no el cuerpo de la skill.
+
+| Parámetro | Valor actual (`react-base-app`) |
+|---|---|
+| Librerías activas | `recharts` (stats de GitHub: lenguajes, actividad, `ImpactMetrics`) + `react-github-calendar` (contribuciones) |
+| Fuente de datos | API pública de GitHub, validada con schema Zod (ver la skill del stack del proyecto) |
+| Acento de la serie principal | `blue-600` light / `blue-400` dark; categorías separadas con variaciones del acento + neutros `gray` |
+| Colores semánticos | `green`/`red`/`amber` solo si el gráfico comunica estado real (éxito/alerta) |
+| Grillas/fondos | Escala neutra fría (`gray-200`/`gray-700` para líneas de grilla); ver `/context/design-tokens.md` |
+| Dark mode | Colores propios por gráfico para ambos temas — no asumir el default de la librería sobre los fondos dark del proyecto |
 
 ## 1. Elegir el tipo de gráfico correcto
 
-- Distribución de lenguajes/tecnologías → gráfico de barras o dona (recharts `BarChart`/`PieChart`), no una tabla de números sueltos si el objetivo es que un reclutador lo escanee en segundos.
-- Actividad en el tiempo (commits, contribuciones) → `react-github-calendar` (el patrón ya esperado por cualquiera que conozca GitHub) en vez de reinventar un heatmap propio con recharts.
-- Métricas de impacto puntuales (ej. `ImpactMetrics`) → priorizar el número grande y legible sobre un gráfico complejo — no todo dato necesita una visualización, a veces un stat tile es más claro que un gráfico con un solo punto de interés.
+- Distribución de categorías (ej. lenguajes del perfil, ver Parámetros) → gráfico de barras o dona (recharts `BarChart`/`PieChart`), no una tabla de números sueltos si el objetivo es que el lector lo escanee en segundos.
+- Actividad en el tiempo (commits, contribuciones) → `react-github-calendar` (un patrón ya familiar para quien conoce la plataforma de origen) en vez de reinventar un heatmap propio con recharts.
+- Métricas de impacto puntuales (ver Parámetros) → priorizar el número grande y legible sobre un gráfico complejo — no todo dato necesita una visualización, a veces un stat tile es más claro que un gráfico con un solo punto de interés.
 - No agregues un tipo de gráfico nuevo (radar, scatter, etc.) solo porque recharts lo soporta — cada tipo nuevo es una convención visual más que aprender; usa el que ya resuelve el caso si existe.
 
-## 2. Tema y color — coherencia con el sistema `blue`
+## 2. Tema y color — coherencia con el sistema de diseño
 
-- El acento de marca (`blue-600`/`blue-400`) es el color principal de la serie de datos destacada — no introduzcas una paleta categórica de colores saturados ajena al sistema de diseño (ver `ui-design-system`).
-- Cuando un gráfico necesita distinguir varias categorías (ej. lenguajes de programación), usa una escala derivada del azul de marca (variaciones de tono/saturación) más los neutros `gray`, reservando los colores semánticos (`green`/`red`/`amber`) solo si el gráfico realmente comunica estado (éxito/alerta), no como relleno decorativo de series.
-- Fondos y grillas del gráfico siguen la escala `gray` fría del resto de la UI (`gray-200`/`gray-700` para líneas de grilla, ver `/context/design-tokens.md`) — un gráfico con grilla gris cálida rompe la coherencia visual inmediatamente notable.
-- Dark mode: cada gráfico define explícitamente sus colores para ambos temas (no asumas que el color por defecto de recharts se ve bien sobre `gray-900`) — verifica contraste en ambos.
+- El color de la serie de datos destacada es el acento definido en Parámetros — no introduzcas una paleta categórica de colores saturados ajena al sistema de diseño (ver `ui-design-system`).
+- Cuando un gráfico necesita distinguir varias categorías (ej. lenguajes de programación), usa la escala categórica derivada del acento más los neutros (ver Parámetros), reservando los colores semánticos solo si el gráfico realmente comunica estado (éxito/alerta), no como relleno decorativo de series.
+- Fondos y grillas del gráfico siguen la escala neutra fría del resto de la UI (ver Parámetros) — una grilla con subtono cálido rompe la coherencia visual inmediatamente notable.
+- Dark mode: cada gráfico define explícitamente sus colores para ambos temas (no asumas que el color por defecto de la librería se ve bien sobre los fondos dark del proyecto, ver Parámetros) — verifica contraste en ambos.
 
 ## 3. Contenedor y responsividad
 
@@ -35,18 +48,18 @@ Guía de decisiones reales para las dos librerías de visualización activas en 
 
 ## 5. Datos y estados
 
-- Igual que cualquier componente que consume la API de GitHub: loading (skeleton del tamaño real del gráfico, no un spinner genérico que colapsa el layout), error (mensaje explícito, no un gráfico vacío sin explicación) y vacío (ej. usuario sin actividad reciente) — un gráfico sin datos nunca se deja en blanco sin contexto.
-- El dato que llega al gráfico ya pasó por el schema Zod que valida la respuesta de GitHub (ver `vite-tanstack-tailwind`) — el gráfico no debe re-validar ni asumir un shape distinto al contrato ya establecido.
+- Igual que cualquier componente que consume la fuente de datos del proyecto (ver Parámetros): loading (skeleton del tamaño real del gráfico, no un spinner genérico que colapsa el layout), error (mensaje explícito, no un gráfico vacío sin explicación) y vacío (ej. sin actividad en el período) — un gráfico sin datos nunca se deja en blanco sin contexto.
+- El dato que llega al gráfico ya pasó por el schema Zod que valida la fuente de datos (ver la skill del stack del proyecto, en Parámetros) — el gráfico no debe re-validar ni asumir un shape distinto al contrato ya establecido.
 
 ## 6. Qué testear (y qué no) en un gráfico
 
 - Testea el **contrato observable**: qué datos llegan al componente y qué se renderiza como consecuencia (ej. cantidad de barras/segmentos igual a la cantidad de categorías de datos) — no el renderizado interno SVG de recharts, que es responsabilidad de la librería.
-- Ver `qa-qc-react-vite` para el patrón general de testing de componentes con datos externos.
+- Ver la skill de testing del stack del proyecto (en Parámetros) para el patrón general de testing de componentes con datos externos.
 
 ## 7. Checklist rápido al crear/revisar un gráfico
 
 - [ ] ¿El tipo de gráfico elegido es el más simple que comunica el dato (no un tipo más complejo "porque se ve más interesante")?
-- [ ] ¿El color principal es `blue` de marca, con neutros `gray` para grilla/fondo, y semánticos solo si comunican estado real?
+- [ ] ¿El color principal, neutros y semánticos siguen los Parámetros, con semánticos solo si comunican estado real?
 - [ ] ¿Tiene altura de contenedor explícita (`ResponsiveContainer` con `height` definido)?
 - [ ] ¿Funciona en dark mode con colores propios verificados, no el default de la librería?
 - [ ] ¿Ninguna serie se distingue solo por color (hay etiqueta/patrón adicional)?

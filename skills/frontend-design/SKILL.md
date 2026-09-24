@@ -1,20 +1,35 @@
 ---
 name: frontend-design
-description: Guía de dirección visual para react-base-app — el portafolio SPA de Pedro Araya (Vite + React 19 + Tailwind). Úsala siempre que la tarea implique tipografía, paleta de color, layout, jerarquía visual o estilo de interfaz, o cuando el usuario pida que algo "se vea profesional", "no genérico" o "con dirección propia". También aplica al revisar si un componente nuevo respeta la identidad visual ya establecida (azul de marca, tipografía Newsreader/IBM Plex Mono) antes de introducir un patrón visual distinto.
+description: Guía metodológica de dirección visual del proyecto actual — úsala siempre que la tarea implique tipografía, paleta de color, layout, jerarquía visual o estilo de interfaz, o cuando el usuario pida que algo "se vea profesional", "no genérico" o "con dirección propia". También aplica al revisar si un componente nuevo respeta la identidad visual ya establecida (los valores de marca viven en los Parámetros del proyecto y `/context`) antes de introducir un patrón visual distinto.
 ---
 
-# Dirección visual — react-base-app (2026)
+# Dirección visual — identidad y sistema de diseño del proyecto actual
 
-Guía de estilo para que cualquier pantalla o componente nuevo se sienta parte del mismo producto, no una plantilla genérica resuelta pantalla por pantalla. Complementa a `ui-design-system` (que define los tokens exactos): esta skill decide *cuándo y por qué* usar cada uno, no solo cuáles existen.
+Guía metodológica para que cualquier pantalla o componente nuevo se sienta parte del mismo producto, no una plantilla genérica resuelta pantalla por pantalla. Esta skill conserva el *cuándo y por qué* de cada decisión; los **valores concretos de identidad** (colores, tipografías, superficies, contexto del producto) viven en los **Parámetros del proyecto** y en los archivos de `/context` que referencian. Complementa a `ui-design-system`, que define los tokens exactos.
 
 Principio rector: **cada decisión visual tiene una razón funcional (jerarquía, legibilidad, consistencia), nunca "porque se ve bien" sin más**. Si no puedes explicar por qué un elemento es más grande, más oscuro o está más separado que otro, probablemente esa decisión todavía no está tomada.
 
+## Parámetros del proyecto — react-base-app (a editar al adaptar)
+
+> Los únicos valores específicos de esta skill. Al adaptar a otro proyecto se editan estos parámetros (y los archivos de `/context` que referencian), no el cuerpo de la skill.
+
+| Parámetro | Valor actual (`react-base-app`) |
+|---|---|
+| Contexto del producto | Portafolio/CV SPA de Pedro Araya; audiencia dual: reclutadores en modo rápido (`recruiterMode`/TL;DR) y devs explorando en detalle (`vscodeMode`); widgets técnicos como "demostraciones embebidas" (`ROICalculator`, `HireMeKanban`, `AIChatWidget`, `CommandPalette`) |
+| Acento decorativo | Único: `blue` (`blue-600` light / `blue-400` dark); `purple`/`indigo`/`emerald`/`amber` descartados (decisión "Sistema de diseño blue unificado", `/context/project-context.md` §5) |
+| Colores semánticos | `green` (éxito/online/completado), `red` (error/peligro), `amber`/`orange` (advertencia/en progreso) — solo para estado, no como decoración |
+| Tipografía | `Newsreader` display/títulos (carácter editorial); `IBM Plex Mono` código/datos técnicos. Sin tercera familia sin razón |
+| Fondos/superficies | Escala `gray` fría neutra (`gray-50`/`white` light, `gray-900`/`gray-800` dark); nunca un gris con subtono cálido |
+| Tokens y stack | Valores exactos en `/context/design-tokens.md` y `ui-design-system`; viabilidad de implementación vía la skill del stack (`vite-tanstack-tailwind`) |
+
 ## 1. Identidad de marca — no negociable
 
-- **Color de acento único**: `blue` de `tailwind.config.js` (`blue-600` light / `blue-400` dark). Ningún acento decorativo nuevo (íconos destacados, bordes activos, CTAs) usa otro matiz — purple/indigo/emerald/amber quedaron descartados explícitamente (ver `/context/project-context.md` §5, decisión "Sistema de diseño blue unificado").
-- **Colores semánticos aparte**: `green` (éxito/online/completado), `red` (error/peligro), `amber`/`orange` (advertencia/en progreso). Estos no son "acentos decorativos" — comunican estado, así que no se reemplazan por blue.
-- **Tipografía**: `Newsreader` para display/títulos (con carácter editorial, no una sans genérica de plantilla), `IBM Plex Mono` para código/datos técnicos. No introduzcas una tercera familia sin razón — cada fuente nueva es una decisión de identidad, no un ajuste de gusto puntual.
-- **Fondos y superficies**: escala `gray` fría neutra (`gray-50`/`white` en light, `gray-900`/`gray-800` en dark) — nunca un gris con subtono cálido, rompe la coherencia con el azul de marca.
+Todos los valores de identidad (acento, colores semánticos, tipografías, superficies) están en los **Parámetros del proyecto**. Reglas invariantes sobre cómo se aplican:
+
+- **Un solo acento decorativo**: ningún ícono destacado, borde activo o CTA nuevo usa un matiz distinto del de marca sin una decisión explícita previa — los alternativos ya se descartaron (ver Parámetros).
+- **Colores semánticos aparte**: los que comunican estado (éxito/error/aviso) no son "acentos decorativos" ni se reemplazan por el color de marca.
+- **Familia tipográfica por categoría**: display/títulos y técnico/código (ver Parámetros). No introduzcas una tercera familia sin razón — cada fuente nueva es una decisión de identidad, no un ajuste de gusto puntual.
+- **Fondos y superficies**: la escala definida en Parámetros, sin subtonos cálidos que rompan la coherencia con la marca.
 
 ## 2. Jerarquía visual antes que decoración
 
@@ -24,7 +39,7 @@ Principio rector: **cada decisión visual tiene una razón funcional (jerarquía
 
 ## 3. Layout y densidad
 
-- Este es un portafolio (secciones de CV, proyectos, widgets técnicos) consumido tanto por reclutadores en modo rápido (`recruiterMode`/TL;DR) como por desarrolladores explorando en detalle (`vscodeMode`) — el layout de una sección nueva se piensa para ambos modos, no solo el que el autor tuvo en mente al escribirla.
+- El producto (ver Parámetros) se consume de formas y por audiencias distintas — el layout de una sección nueva se piensa para todos sus modos/audiencias, no solo el que el autor tuvo en mente al escribirla.
 - Espaciado en escala consistente (múltiplos de 4/8px vía las utilidades de Tailwind) — nunca un valor arbitrario (`mt-[13px]`) que rompe el ritmo vertical del resto de la página.
 - Diseña para el rango completo de viewports relevante (mobile-first, breakpoints de Tailwind), no solo para el ancho de escritorio en el que se probó primero — la navegación mobile y desktop de `router.tsx` ya establece el patrón a seguir para nuevas secciones.
 - Elementos decorativos (3D con react-three-fiber, animaciones de Framer Motion) refuerzan la jerarquía, nunca compiten con el contenido real (texto de CV, datos de proyectos) por atención — si una animación hace más difícil leer el contenido, la animación pierde.
@@ -32,20 +47,20 @@ Principio rector: **cada decisión visual tiene una razón funcional (jerarquía
 ## 4. Evitar el look genérico de plantilla
 
 - Sin paletas ni tipografías "default de librería" sin dirección propia — el objetivo declarado del proyecto es un CV memorable, no un template de Tailwind UI sin adaptar.
-- Los widgets técnicos (`ROICalculator`, `HireMeKanban`, `AIChatWidget`, `CommandPalette`) son parte de la narrativa de portafolio ("demostraciones de skill técnicas embebidas") — su estilo visual debe sentirse curado, no un componente de ejemplo de una librería de UI pegado sin ajuste.
+- Los widgets técnicos del proyecto (ver Parámetros) son parte de su narrativa ("demostraciones de skill embebidas") — su estilo visual debe sentirse curado, no un componente de ejemplo de una librería de UI pegado sin ajuste.
 - Antes de aceptar un ícono, imagen o layout "porque fue lo primero que apareció", pregúntate si refuerza la identidad del producto o es intercambiable con cualquier otro sitio — si es intercambiable, probablemente no está terminado.
 
 ## 5. Relación con la implementación real
 
-- Antes de proponer un patrón visual que termine en código, revisa `vite-tanstack-tailwind` para confirmar que es viable en una SPA sin SSR (ej. nada que dependa de renderizado en servidor) y `ui-design-system` para los valores exactos de token que corresponde usar.
-- Si una dirección visual implica un estado (hover, error, vacío) no contemplado, se especifica ahí mismo — un mockup o descripción que solo cubre el happy path no es una especificación completa (ver checklist de `qa-qc-react-vite` para los casos que van a testear ese estado).
+- Antes de proponer un patrón visual que termine en código, revisa la skill del stack del proyecto (ver Parámetros) para confirmar viabilidad en su arquitectura (ej. una SPA sin SSR no soporta renderizado en servidor) y `ui-design-system` para los valores exactos de token que corresponde usar.
+- Si una dirección visual implica un estado (hover, error, vacío) no contemplado, se especifica ahí mismo — un mockup o descripción que solo cubre el happy path no es una especificación completa (ver la skill de testing correspondiente al stack para los casos que van a testear ese estado).
 
 ## 6. Checklist rápido al proponer una dirección visual
 
-- [ ] ¿El único acento decorativo es `blue`? ¿Los colores semánticos (`green`/`red`/`amber`) se usan solo para estado, no como decoración?
-- [ ] ¿La tipografía usada es `Newsreader` (display) o `IBM Plex Mono` (técnico/código), sin una tercera familia sin justificar?
+- [ ] ¿El acento decorativo es el único definido en Parámetros? ¿Los colores semánticos (estado) no se usan como decoración?
+- [ ] ¿La tipografía usa solo las familias/roles definidos en Parámetros, sin una familia nueva sin justificar?
 - [ ] ¿Hay una jerarquía clara (no dos elementos del mismo peso compitiendo por atención)?
 - [ ] ¿Ya existe una variante de este componente en el sistema de diseño antes de crear una nueva?
-- [ ] ¿El layout funciona en mobile y desktop, no solo en el viewport donde se diseñó primero?
+- [ ] ¿El layout funciona en todos los viewports relevantes, no solo en el que se diseñó primero?
 - [ ] ¿Una animación o elemento 3D refuerza el contenido en vez de competir con él?
-- [ ] ¿Esto se ve como parte de este portafolio específico, o sería intercambiable con cualquier plantilla genérica?
+- [ ] ¿Esto se ve como parte de este producto específico (Parámetros), o sería intercambiable con cualquier plantilla genérica?
