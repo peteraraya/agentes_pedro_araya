@@ -39,7 +39,7 @@ Leyenda de columnas:
 | Archivo | Clase | Qué editar | Si lo saltas |
 |---|---|---|---|
 | `context/project-context.md` | 🔴 | §1 producto/audiencia, §2 stack (tabla completa), §4 restricciones, §6 glosario, §7 proyectos. **Empezar por aquí** | Los agentes trabajan creyendo que el proyecto es el portafolio Vite+NestJS de Pedro. Es la fuente que tiene prioridad sobre todo lo demás: el resto del repo queda mintiendo detrás |
-| `README.md` | 🔴 | Descripción, stack, counts ("5 agentes / 13 skills"), tabla de estructura y de `/specs`, aviso de adaptación | Cualquiera que abra el repo lee la descripción del proyecto equivocado |
+| `README.md` | 🔴 | Descripción, stack, counts ("5 agentes / 14 skills"), tabla de estructura y de `/specs`, aviso de adaptación | Cualquiera que abra el repo lee la descripción del proyecto equivocado |
 | `AGENTS.md` | 🔴 | Descripción del proyecto objetivo (§intro), counts y mapa, sección de adaptación (este archivo) | El punto de entrada de todo agente apunta al proyecto equivocado |
 | `agents/agents-README.md` | 🔴 | Alcance e índices del equipo, tablas de activación por skill, notas full-stack | Los agentes activan skills o flujos que no aplican al nuevo proyecto |
 | `agents/frontend.md` | 🔴 | Dominio/stack (p. ej. Vite→Next, TanStack), tabla de activación de skills que consume | El agente frontend aplica convenciones del stack anterior |
@@ -50,7 +50,7 @@ Leyenda de columnas:
 | `orchestration/orchestrator.md` | 🟡 | Notas full-stack (flujo designer→backend→frontend→qa, dueño de contratos de API) | Coordina flujos que incluyen un backend que no existe o con otro stack |
 | `orchestration/incident-runbook.md` | ⚪ | (genérico — incidentes, no stack) | Casi nunca se toca |
 | `skills/skills-README.md` | 🔴 | Tabla de skills activas/disponibles y qué agente las consume | Skills huérfanas o "activas" que no existen → inconsistencias en cada tarea |
-| `skills/*.skill` (13) | 🟡 | **Podar**: borrar las que no aplican al stack, agregar las que falten | Skills muertas que los agentes activan porque siguen listadas. Es la fuente #1 de inconsistencia |
+| `skills/<nombre>/SKILL.md` | 🟡 | **Podar**: borrar las que no aplican al stack, agregar las que falten | Skills muertas que los agentes activan porque siguen listadas. Es la fuente #1 de inconsistencia |
 | `context/design-tokens.md` | 🟡 | Paleta `blue` y tokens (si el proyecto no usa esta marca/sistema) | La UI sale pintada con la marca del portafolio anterior |
 | `context/handoff-protocol.md` | 🟡 | Los 6 handoffs (si no hay backend: quitar `designer→backend` y `backend→frontend`) | El equipo pasa trabajo a agentes inexistentes o con contratos de API propias que nadie define |
 | `context/definition-of-done.md` | 🟡 | Checklist "Backend propio" (perfil B) o adaptarlo al nuevo stack | Las entregas se consideran incompletas/incorrectas contra un backend que no aplica |
@@ -98,7 +98,7 @@ Orden de edición recomendado (no lo cambies — cada paso certifica que el ante
 
 1. **Define el perfil** (A/B/C) y anótalo.
 2. **`context/project-context.md`**: producto, stack, restricciones, glosario, proyectos. Este archivo es la fuente de verdad; todo lo demás lo referencia.
-3. **`skills/`**: poda los `.skill` que no apliquen y agrega los que falten; deja `skills-README.md` exacto.
+3. **`skills/`**: poda las carpetas `<nombre>/SKILL.md` que no apliquen y agrega las que falten; deja `skills-README.md` exacto.
 4. **`agents/`**: `agents-README.md`, `frontend.md`, y según perfil `backend.md`/`designer.md`/`qa-tester.md` — cada tabla de activación apuntando solo a skills que existen.
 5. **`roles/roles-matrix.md`** y **`orchestration/orchestrator.md`**: composición del equipo y flujo reales.
 6. **Reversión full-stack** (solo perfil B): `handoff-protocol.md`, `definition-of-done.md`, `pr-convention.md`.
@@ -120,7 +120,7 @@ react-base-app | TanStack | Vite | NestJS(?!s) | TypeORM | Prisma | Vercel | Git
 Busca con tu editor/ripgrep sobre `*.md` (excluyendo `.git`). Cero coincidencias de producto de origen. (Para `Nest`, excluye coincidencias parciales como `NestJS` a propósito.)
 
 **B. Skills coherentes** — para cada skill listada como "activa" en `skills-README.md` y en las tablas de activación de los agentes:
-- [ ] Existe físicamente el `.skill` en `skills/` (los `.skill` son zips con `SKILL.md` dentro — mira `skills/skills-README.md` para validarlos).
+- [ ] Existe físicamente `skills/<nombre>/SKILL.md` y el `name` del frontmatter coincide con el nombre de la carpeta (formato `carpeta + SKILL.md` que exige opencode — ver `skills/skills-README.md`).
 - [ ] Ninguna skill presente queda "huérfana" (sin agente que la consuma ni listada como disponible).
 
 **C. Enlaces internos** — todos los enlaces relativos entre `.md` apuntan a archivos reales (checa con un validador de markdown si tienes uno, o revisa los nombres a mano).
@@ -133,9 +133,9 @@ Busca con tu editor/ripgrep sobre `*.md` (excluyendo `.git`). Cero coincidencias
 
 ## 6. Trampas comunes
 
-- **Dejar una skill "activa" que no existe** (o al revés): es el error más frecuente; la verificación §B lo caza. Cada `.skill` tiene su `name` en el frontmatter — lo que se lista en tablas debe coincidir.
+- **Dejar una skill "activa" que no existe** (o al revés): es el error más frecuente; la verificación §B lo caza. Cada skill tiene su `name` en el frontmatter — lo que se lista en tablas debe coincidir tanto con el `name` como con el nombre de su carpeta.
 - **Revertir full-stack a medias**: borrar el agente `backend` pero dejar `handoff-protocol.md` con el handoff `backend→frontend` o el DoD con "Backend propio". Vuelve a leer §3-B hasta que no quede ningún "backed" de más. (Este repo vivió exactamente esa inconsistencia en ambas direcciones.)
 - **Editar solo `project-context.md`** y dejar `README`/`AGENTS`/plantillas con el proyecto anterior: los agentes checan el contexto, pero una persona que lea la raíz del repo ve otro proyecto.
 - **Dejar specs de features del portafolio** (`career-timeline`, `portfolio-engagement`) como si fueran plantilla genérica: contaminan la idea de "qué features va a tener mi proyecto".
 - **Activar skills "disponibles"** (Next.js, Nivo, Plotly, Leaflet) como default en el frontend nuevo sin revisar el `frontend.md`: solo deben activarse a pedido explícito.
-- **No actualizar los counts** (`README`/`AGENTS`): el repo declara 5 agentes / 13 skills que ya no cuadran.
+- **No actualizar los counts** (`README`/`AGENTS`): el repo declara 5 agentes / 14 skills que ya no cuadran.

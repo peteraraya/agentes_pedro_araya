@@ -33,7 +33,7 @@ Después de este arranque, lee solo los archivos que tu tarea active (ver más a
 | `/agents` | Definiciones de cada agente del equipo | `agents-README.md` (índice), `frontend.md`, `backend.md`, `designer.md`, `qa-tester.md` | `/orchestration` (coordinador), `/skills` (conocimiento que consumen), `/context` (reglas que respetan), `/roles` (a quién le toca qué) |
 | `/orchestration` | El agente coordinador y el runbook de incidentes | `orchestrator.md`, `incident-runbook.md` | `/agents` (a quién enruta), `/context` (reglas que hace respetar), `/specs` (cuándo una feature está completa) |
 | `/roles` | Matriz de responsabilidades | `roles-matrix.md` | `/agents` (a quién corresponde cada dominio), `/orchestration` (flujo de decisión) |
-| `/skills` | Conocimiento especializado por dominio (paquetes `.skill`) | `skills-README.md` (índice) | `/agents` (tablas de activación: qué agente consume qué skill), `/context` (tokens y convenciones que las skills referencian) |
+| `/skills` | Conocimiento especializado por dominio (carpetas `<nombre>/SKILL.md`, formato que carga opencode) | `skills-README.md` (índice) | `/agents` (tablas de activación: qué agente consume qué skill), `/context` (tokens y convenciones que las skills referencian) |
 | `/context` | Contexto vivo del proyecto (convenciones, tokens, protocolos) | `project-context.md`, `design-tokens.md`, `handoff-protocol.md`, `definition-of-done.md`, `pr-convention.md` | Todo el repo: **es la fuente de verdad que todos deben consultar** |
 | `/specs` | Especificaciones de features y plantillas | `feature-spec-template.md`, `api-contract-template.md`, `career-timeline.md`, `portfolio-engagement.md`, `api/portfolio-engagement.md` | `/context` (DoD y handoffs), `/agents` (qué agente construye el feature) |
 

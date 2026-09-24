@@ -29,7 +29,27 @@ Estas skills existen físicamente en `/skills` y las consumen los agentes del eq
 | `plotly-expert-charts` | Gráficos interactivos/científicos con react-plotly.js | `frontend`, `designer`, `qa-tester` — a pedido explícito del usuario |
 | `leaflet-maps-integration` | Mapas interactivos con react-leaflet | `frontend`, `designer`, `qa-tester` — a pedido explícito del usuario |
 
-Cada skill es un paquete `.skill` (zip con `<nombre>/SKILL.md` dentro) en esta misma carpeta — si una tabla de activación en `/agents` menciona una skill que no está en estas tablas, es un error a corregir, no una skill "implícita".
+## Skills de workflow reutilizable (framework-agnostic, no se activan por defecto en `react-base-app`)
+
+Workflow de metodología genérico (sin acoplar a un stack/proyecto concreto): los valores específicos viven en su sección "Parámetros del proyecto". No la consumen las tablas de activación de `/agents` para `react-base-app`; se activa cuando se trabaja sobre cualquier proyecto y se pide desarrollo/revisión de código full-stack end-to-end.
+
+| Skill | Dominio | Cuándo se activa |
+|---|---|---|
+| `fullstack-metodico` | Workflow genérico de desarrollo y revisión senior full-stack (entender contexto → planificar → implementar → revisar línea por línea → verificar), framework-agnostic | en cualquier proyecto, cuando la tarea es escribir o revisar código end-to-end (multi-capa) en vez de una pregunta puntual |
+
+Cada skill es una carpeta `skills/<nombre>/SKILL.md` en esta misma carpeta (formato que exige opencode: el `name` del frontmatter DEBE coincidir con el nombre de la carpeta) — si una tabla de activación en `/agents` menciona una skill que no está en estas tablas, es un error a corregir, no una skill "implícita".
+
+## Estructura de una skill (principio de abstracción)
+
+Toda skill del catálogo sigue dos capas separadas, para que sea reutilizable al adaptar el repo a otro proyecto:
+
+1. **Workflow / guía reutilizable** (el cuerpo): el "cómo" — decisiones, errores comunes, checklists. No contiene valores del proyecto; donde dependa de uno, referencia los parámetros o el `/context`.
+2. **Sección `## Parámetros del proyecto`** (al inicio): los únicos valores específicos — stack y versiones, deploy, fuentes de datos, paleta/tipografía, comandos de verificación. Se edita al adaptar a otro proyecto (ver `/ADAPTING.md`), nunca el workflow.
+
+Reglas derivadas:
+- Una skill cuyo contenido es conocimiento de un **framework/stack** (ej. `vite-tanstack-tailwind`, `nestjs-secure-backend`) es reutilizable *tal cual* en cualquier proyecto que use ese stack — sus parámetros solo cambian versiones/valores del proyecto actual.
+- Una skill cuyo dominio es la **identidad de un proyecto específico** (ej. `ui-design-system`) mantiene su valor en la metodología y mueve los valores (colores, fuentes, tokens) a la sección de parámetros, apuntando a `/context/design-tokens.md`.
+- Lo que valga solo para un proyecto no se duplica en la skill: vive en `/context` y la skill lo referencia.
 
 ## Cómo se activan
 
@@ -42,8 +62,9 @@ Cada agente en `/agents` tiene su propia tabla de activación que mapea skills a
 
 ## Convención al agregar una nueva skill
 
-1. Formato `SKILL.md` estándar (o paquete `.skill` con `SKILL.md` dentro): frontmatter con `name` y `description` (la descripción debe listar disparadores concretos — frases/acciones que activan la skill, no solo el nombre del dominio).
-2. Contenido orientado a decisiones reales y errores comunes, no a documentación genérica de la librería/framework.
-3. Cierra siempre con un checklist rápido aplicable al generar código.
-4. Agrégala a la tabla correspondiente (activas o disponibles) y a la tabla de activación de cada agente que deba consumirla en `/agents`.
-5. Si la skill introduce una convención que otras skills ya cubrían parcialmente, revisa solapamiento antes de publicarla.
+1. Formato `SKILL.md` estándar: carpeta `skills/<nombre>/SKILL.md` con frontmatter `name` y `description` (la descripción debe listar disparadores concretos — frases/acciones que activan la skill, no solo el nombre del dominio). El `name` DEBE coincidir con el nombre de la carpeta (lo exige opencode); la carpeta se crea más las veces que haga falta, nunca como zip.
+2. Estructura de dos capas (ver arriba): workflow reutilizable + sección `## Parámetros del proyecto` con lo específico, apuntando a `/context` cuando aplica.
+3. Contenido orientado a decisiones reales y errores comunes, no a documentación genérica de la librería/framework.
+4. Cierra siempre con un checklist rápido aplicable al generar código.
+5. Agrégala a la tabla correspondiente (activas, disponibles o workflow reutilizable) y a la tabla de activación de cada agente que deba consumirla en `/agents`.
+6. Si la skill introduce una convención que otras skills ya cubrían parcialmente, revisa solapamiento antes de publicarla.

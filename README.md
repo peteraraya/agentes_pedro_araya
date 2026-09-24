@@ -24,7 +24,7 @@ Este repositorio define cómo trabaja un **equipo de agentes de IA** sobre `reac
 | | |
 |---|---|
 | Agentes | 5 (`orchestrator`, `frontend`, `backend`, `designer`, `qa-tester`) |
-| Skills | 13 paquetes `.skill` en `/skills` (9 activas en `react-base-app` + 4 disponibles para stack ampliado) |
+| Skills | 14 en `/skills` (9 activas en `react-base-app` + 4 de stack ampliado + 1 de proyecto externo) |
 | Documentos de contexto | 5 en `/context` |
 | Especificaciones | 3 en `/specs` (2 features: `career-timeline` completa, `portfolio-engagement` en diseño) |
 | Licencia | MIT |
@@ -50,7 +50,7 @@ Para saber a qué agente corresponde cada tipo de solicitud, ver la [matriz de r
 | [`/agents`](./agents/agents-README.md) | Identidad, tono, dominio técnico y autonomía de cada agente (`frontend`, `backend`, `designer`, `qa-tester`) + el índice del equipo |
 | [`/orchestration`](./orchestration/orchestrator.md) | El `orchestrator` (clasifica y coordina el flujo) y el [runbook de incidentes](./orchestration/incident-runbook.md) |
 | [`/roles`](./roles/roles-matrix.md) | Matriz de responsabilidades — qué agente resuelve qué tipo de solicitud |
-| [`/skills`](./skills/skills-README.md) | Conocimiento especializado por dominio (`.skill`, paquetes con `SKILL.md`) que los agentes consultan de forma autónoma — stack full-stack + librerías alternativas |
+| [`/skills`](./skills/skills-README.md) | Conocimiento especializado por dominio — carpetas `skills/<nombre>/SKILL.md` (formato que carga opencode) que los agentes consultan de forma autónoma — stack full-stack + librerías alternativas |
 | [`/context`](./context/project-context.md) | Contexto vivo del proyecto: `project-context.md`, `design-tokens.md`, `handoff-protocol.md`, `definition-of-done.md`, `pr-convention.md` |
 | [`/specs`](./specs/feature-spec-template.md) | Plantillas y specs reales de features — incluye la [career timeline](./specs/career-timeline.md) (completa) y el [portfolio engagement](./specs/portfolio-engagement.md) con su [contrato de API](./specs/api/portfolio-engagement.md) |
 
@@ -68,7 +68,7 @@ orchestrator.md ───────────────────► cla
         ▼
 agents/*.md (frontend | backend | designer | qa-tester)
         │
-        ├──► skills/*.skill             conocimiento que ACTIVA la tarea
+        ├──► skills/<nombre>/SKILL.md       conocimiento que ACTIVA la tarea
         ├──► context/handoff-protocol   al pasar trabajo al siguiente agente
         │
         ▼
