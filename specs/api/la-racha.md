@@ -58,6 +58,10 @@ Body `{ lastWorkDay }`; fecha ISO no futura. `200 { startDate, days, isActive }`
 
 Cierra la racha activa con razón `EMPLOYED` o `MANUAL`. `200 { isActive: false, endDate, endReason }`; `404` sin racha activa.
 
+### `GET /me/streak/milestones`
+
+Bearer JWT requerido. `200 { currentDays: number, items: Milestone[] }`. Devuelve los hitos de constancia (30, 60 y 90 días) con su estado alcanzado y días restantes. `Milestone = { days, title, description, reached, daysRemaining }`.
+
 ### `DELETE /me`
 
 Elimina la cuenta autenticada y sus datos asociados; `204`. No acepta IDs de usuario suministrados por el cliente.

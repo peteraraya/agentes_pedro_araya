@@ -69,6 +69,11 @@ No usar Next.js, GitHub API, Zustand, PWA, Kubernetes ni servicios externos que 
 **Decisión**: backend define y documenta `/api/v1`; frontend valida y consume exactamente ese contrato. Directorio/ranking solo proyectan campos públicos.
 **Agentes afectados**: backend, frontend y QA.
 
+### 2026-03-11 — Hitos de racha (Fase 2)
+**Contexto**: los usuarios necesitan hitos visuales para celebrar su constancia en la búsqueda activa (30, 60, 90 días).
+**Decisión**: endpoint `GET /me/streak/milestones` que calcula `currentDays` desde `startDate` con `getStreakDays` existente (sin tablas nuevas). Hitos fijos definidos como constantes `MILESTONES` en `packages/shared-types` para que backend y frontend compartan textos empáticos. Sección "Tus hitos" en el dashboard con estados loading/error/vacío/éxito.
+**Agentes afectados**: backend, frontend, qa-tester.
+
 ## 7. Glosario
 
 - **Racha**: días consecutivos desde el último día trabajado, calculados desde una fecha autodeclarada.
