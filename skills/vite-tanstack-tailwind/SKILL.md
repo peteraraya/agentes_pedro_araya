@@ -1,72 +1,68 @@
 ---
 name: vite-tanstack-tailwind
-description: Guía técnica del stack Vite + React 19 + TanStack Router/Query/Form + Tailwind CSS 3 para SPA client-side sin Next.js ni SSR (stack actual del proyecto objetivo — los valores del proyecto están en los Parámetros del proyecto). Úsala siempre que la tarea implique ruteo (TanStack Router), estado de datos servidor/cliente (TanStack Query/Zustand/Form), configuración de build (Vite, PWA), o estilos con Tailwind. También aplica al revisar restricciones reales de implementación antes de proponer un patrón de interacción o al escribir/depurar código de componentes, hooks o rutas.
+description: Guía técnica del stack Vite + React + TanStack Router/Query y API NestJS del proyecto La Racha. Úsala siempre que la tarea implique ruteo, consultas al servidor, formularios, configuración de build, o estilos del cliente web.
 ---
 
-# Stack de implementación — Vite + React + TanStack + Tailwind (SPA client-side)
+# Stack de implementación — Vite + React + TanStack
 
-Referencia técnica del stack definido en los **Parámetros del proyecto** (abajo): una SPA client-side sin SSR. Todo el cuerpo de la skill asume ese stack; si tu proyecto difiere, edita los Parámetros, **nunca** el workflow de abajo.
+Referencia técnica del stack actual del monorepo La Racha.
 
-## Parámetros del proyecto — react-base-app (a editar al adaptar)
+## Parámetros del proyecto — La Racha
 
-> Los únicos valores específicos de esta skill. Al adaptar a otro proyecto se editan estos parámetros (y los archivos de `/context` que referencian), no el cuerpo de la skill.
+> Mantén estos valores sincronizados con el proyecto y sus archivos de contexto.
 
-| Parámetro | Valor actual (`react-base-app`) |
+| Parámetro | Valor actual (`La Racha`) |
 |---|---|
-| Arquitectura | SPA estática client-side, sin SSR ni servidor propio (ver `/context/project-context.md` §4) |
-| Deploy | Vercel; PWA vía `vite-plugin-pwa` (ver `/context/pr-convention.md`) |
-| Datos de servidor | TanStack Query consumiendo la API pública de **GitHub**, validada con schema Zod propio |
-| Estado UI | Zustand (`src/stores/uiStore`) solo para UI pura |
-| Ruteo | `src/app/router.tsx` (rutas tipadas); cada ruta nueva enlazada en ambos menús (desktop y mobile) |
-| i18n | Contenido de CV vía `cvData[i18n.language]` |
-| Estilos | Tokens en `/context/design-tokens.md`; dark mode con variantes `dark:` |
-| SEO | Mínimo por diseño (SPA sin SSR) |
+| Arquitectura | SPA Vite/React y API propia NestJS (ver `/context/project-context.md`) |
+| Deploy | Pendiente; no asumir proveedor |
+| Datos de servidor | TanStack Query consumiendo `/api/v1` y schemas Zod compartidos |
+| Estado UI | Estado local React mientras no exista necesidad real de store global |
+| Ruteo | `apps/web/src/router.tsx` con TanStack Router |
+| i18n | Español base; internacionalización pendiente |
+| Estilos | CSS responsivo y tokens en `/context/design-tokens.md`; preferencia del sistema |
+| SEO | SPA sin SSR; no prometer indexación dinámica hasta incorporar prerender/SSR |
 
-## 1. Build — Vite 6
+## 1. Build — Vite
 
-- `npm run build` produce `dist/` estático — cualquier feature que asuma un entorno de servidor (cookies httpOnly de servidor, middleware de edge, `getServerSideProps`) no aplica aquí; si algo lo necesita, es una señal de que el proyecto necesitaría un backend propio (no existe hoy, ver `/context/project-context.md` §4).
-- PWA vía `vite-plugin-pwa` — cualquier cambio que afecte assets estáticos o rutas nuevas debe verificar que el manifest/service worker generado siga siendo válido (ver `/context/definition-of-done.md`, sección CI/CD).
-- **React Compiler** (`babel-plugin-react-compiler`) hace memoización automática — no escribas `useMemo`/`useCallback` manuales "por si acaso"; son redundantes salvo un caso medido de perf real que el compiler no resuelve.
-- SEO es mínimo por diseño (portafolio SPA sin SSR) — no inviertas esfuerzo en metadata dinámica ni prerendering salvo pedido explícito.
+- `npm run build --workspace @antiracha/web` produce `apps/web/dist/`. La SPA consume la API NestJS; no implementa middleware de servidor/SSR.
+- No se ha configurado PWA; no asumir que hay manifest o service worker.
+- No hay React Compiler; aplica memoización solo si es necesaria y justificada.
+- SEO dinámico queda limitado por ser SPA sin SSR/prerender.
 
-## 2. Ruteo — TanStack Router (`src/app/router.tsx`)
+## 2. Ruteo — TanStack Router (`apps/web/src/router.tsx`)
 
-- Rutas tipadas con `createRoute`/`createRootRoute` — una ruta nueva sigue el mismo patrón que las existentes (ver el layout global y los `Link` de navegación desktop/mobile ya definidos).
-- Code splitting de rutas pesadas (gráficos, 3D) vía `React.lazy`/`Suspense` o el lazy loading nativo de TanStack Router — no infles el bundle inicial con una ruta que no todos los visitantes van a abrir.
-- Nueva ruta = agregar el `Link` correspondiente en **ambos** menús (desktop y mobile) siguiendo el estilo ya existente — olvidar uno de los dos es el error más común al agregar una página.
-- El idioma activo (`i18n.language`) determina qué versión de `cvData` se muestra (`cvData[i18n.language]`) — una ruta nueva que muestra contenido de CV sigue ese mismo patrón, no inventa su propia fuente de datos.
+- Sigue la configuración y patrones existentes de TanStack Router.
+- Añade rutas al layout/navegación cuando corresponda y comprueba su acceso directo al recargar la SPA.
 
-## 3. Datos servidor — TanStack Query (API externa — ver Parámetros)
+## 3. Datos servidor — TanStack Query y API propia
 
-- Todo fetch pasa por TanStack Query (hooks tipados), nunca un `useEffect` con `fetch` a pelo — caché, invalidación y reintentos configurados de forma centralizada.
-- Toda respuesta de la API se valida con un **schema Zod propio** antes de usarse en la UI — la API externa (Parámetros) es la fuente de verdad en runtime, pero su forma real (campos ausentes en ciertos perfiles, límites de paginación) no es 100% la documentada; el schema es lo que realmente protege al componente.
-- Casos de fallo a contemplar siempre: `404` (usuario/repo inexistente), `403` (rate limit de la API pública sin autenticar), timeout, respuesta malformada — un hook nuevo que consume la API externa (ver Parámetros) sin manejar estos casos no está completo (ver `qa-qc-react-vite` para cómo se testean).
-- No hay contrato de API propio que coordinar entre agentes: `frontend` define el schema Zod directamente a partir de la respuesta real de la API externa (ver `/context/handoff-protocol.md`, handoff 2).
+- Las solicitudes remotas usan TanStack Query y el cliente común de `apps/web/src/lib/api.ts`.
+- Valida respuestas con schemas compartidos de `packages/shared-types`; no redefinas contratos en cada vista.
+- Maneja errores HTTP, desconexión, respuesta inválida, loading y resultados vacíos con estados observables para el usuario.
+- Cambios del contrato se coordinan entre API y web mediante `/context/handoff-protocol.md`.
 
-## 4. Estado UI — Zustand
+## 4. Estado de interfaz
 
-- Zustand es **solo** para estado de UI puro (ej. `uiStore` — tema, modales, toggles de `recruiterMode`/`vscodeMode`). Si un dato viene de TanStack Query, no se duplica en Zustand "para tenerlo más a mano" — la caché de Query ya es la fuente de verdad para datos de servidor.
-- Antes de agregar un store nuevo, confirma que realmente es estado de interacción (no derivable de props/datos existentes) — un valor que se puede calcular a partir de algo que ya existe no necesita su propio store.
+- Prefiere estado local React. No se ha adoptado Zustand ni otro store global.
+- No dupliques en estado local datos cuya fuente de verdad sea TanStack Query.
 
-## 5. Formularios — TanStack Form + Zod
+## 5. Formularios — React y Zod
 
-- Validación de formularios con Zod vía `@tanstack/zod-form-adapter` — el schema es la única fuente de las reglas de validación, no dupliques la regla en el JSX (ej. un `required` HTML además del schema, que puede desincronizarse).
-- Errores de validación se muestran en el momento oportuno (no todo al final, no en cada tecla) — ver `frontend-design`/`ui-design-system` para el patrón de estado de error.
+- Sigue los patrones de formularios existentes; valida entradas con los schemas compartidos o schemas locales cuando sean exclusivos de UI.
+- Los errores deben ser accesibles y no revelar detalles internos de la API.
 
-## 6. Estilos — Tailwind CSS 3
+## 6. Estilos — CSS
 
-- Tokens de color/tipografía/espaciado en `/context/design-tokens.md` — no elijas un valor de color o espaciado "a ojo" cuando el token ya existe.
-- Sin clases utilitarias repetidas sin abstraer: si el mismo combo de 6+ clases se repite en 3+ lugares, es un componente o una clase compuesta con `@apply`, no copy-paste indefinido.
-- Dark mode vía las variantes `dark:` de Tailwind en cada componente nuevo — no se agrega como un paso posterior; se piensa junto con el estilo light.
+- Usa las variables/tokens CSS de `apps/web/src/styles.css` y `/context/design-tokens.md`.
+- Mantén layouts accesibles y responsivos; respeta `prefers-reduced-motion` y preferencias de tema existentes.
 
 ## 7. Arquitectura por capas — dónde va cada cosa
 
 ```
-Ruteo tipado (TanStack Router)
-  → hook TanStack Query (datos servidor, API externa (Parámetros))
-    → store Zustand (estado UI puro, si aplica)
-      → schema Zod (contrato de validación de datos/formularios)
-        → componente de presentación ("tonto", recibe props/hooks)
+Ruteo (TanStack Router)
+  → TanStack Query + cliente común (API NestJS)
+    → schemas Zod compartidos
+      → componentes y formularios accesibles
 ```
 
 - La obtención de datos vive en hooks de TanStack Query, no dispersa en `useEffect` dentro de componentes de UI.
@@ -74,11 +70,9 @@ Ruteo tipado (TanStack Router)
 
 ## 8. Checklist rápido al escribir código de este stack
 
-- [ ] ¿El fetch usa un hook de TanStack Query, nunca un `useEffect` con fetch directo?
-- [ ] ¿La respuesta de la API externa (ver Parámetros) se valida con un schema Zod antes de usarse?
+- [ ] ¿Las solicitudes usan el cliente común y TanStack Query?
+- [ ] ¿La respuesta se valida con el contrato compartido?
 - [ ] ¿Están cubiertos los estados loading/error/vacío/éxito, no solo el happy path?
-- [ ] ¿Zustand se usa solo para estado de UI puro, no para duplicar datos de servidor?
-- [ ] ¿La ruta nueva está registrada en `router.tsx` y enlazada en ambos menús (desktop y mobile)?
-- [ ] ¿Rutas o componentes pesados (gráficos, 3D) usan code splitting?
-- [ ] ¿Los estilos usan los tokens de `/context/design-tokens.md`, con variantes `dark:` desde el inicio?
-- [ ] ¿Hay algún supuesto de servidor/SSR que no aplica a esta SPA?
+- [ ] ¿La ruta nueva está registrada en `apps/web/src/router.tsx` y navega correctamente?
+- [ ] ¿Los estilos usan tokens y mantienen accesibilidad/responsividad?
+- [ ] ¿Hay algún supuesto de SSR que no aplica a esta SPA?

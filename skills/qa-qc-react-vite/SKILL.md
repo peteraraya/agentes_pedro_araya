@@ -1,44 +1,39 @@
 ---
 name: qa-qc-react-vite
-description: Estrategia de testing de una SPA Vite/React/TanStack — Vitest, React Testing Library, MSW, jsdom y Playwright (E2E acotado), sin backend propio, que consume una API externa (los detalles del proyecto están en los Parámetros del proyecto). Úsala siempre que la tarea implique escribir o revisar tests unitarios/integración/E2E, configurar mocks de una API externa con MSW, definir cobertura o estrategia de testing, o cuando el usuario pida que el código esté "bien probado" o "sin regresiones".
+description: Estrategia de testing del monorepo La Racha: Vitest, React Testing Library para Vite/React y tests unitarios/integración de NestJS y contratos compartidos. Úsala al escribir o revisar tests, definir cobertura o estrategia de testing, o cuando se pida evitar regresiones.
 ---
 
-# Testing — SPA Vite/React (Vitest + RTL + MSW + Playwright)
+# Testing — Web Vite/React (Vitest + RTL)
 
-Estrategia de testing para una **SPA sin backend propio**: no hay endpoints propios que testear, el "contrato" a verificar es la respuesta real (o mockeada) de la API externa del proyecto (ver Parámetros). Prioriza integration tests (componente + MSW) sobre una suite E2E extensa.
+Estrategia de testing para el monorepo La Racha: web Vite/React, API propia NestJS y contratos Zod compartidos. Prioriza pruebas unitarias e integración deterministas; usa E2E para flujos críticos cuando la infraestructura esté disponible.
 
-## Parámetros del proyecto — react-base-app (a editar al adaptar)
+## Parámetros del proyecto — La Racha
 
 > Los únicos valores específicos de esta skill. Al adaptar a otro proyecto se editan estos parámetros (y los archivos de `/context` que referencian), no el cuerpo de la skill.
 
-| Parámetro | Valor actual (`react-base-app`) |
+| Parámetro | Valor actual (`La Racha`) |
 |---|---|
-| Aplicación | SPA Vite + React 19 + TanStack (Router/Query), sin backend propio |
-| API externa a mockear | Pública de GitHub (contrato validado con schema Zod definido por `frontend`) |
-| Flujos E2E críticos | Análisis de un perfil de GitHub; flujo de contacto |
-| Ejemplos de helpers puros | `buildTimeline`, `sortByPeriodDesc` (feature career timeline) |
-| i18n en tests | `react-i18next` se mockea (su init asíncrono real causa flaky tests) |
+| Aplicación | Monorepo npm: Vite/React, NestJS, Prisma y PostgreSQL |
+| Contrato | Schemas Zod de `packages/shared-types` |
+| Flujos críticos | Registro/verificación, autenticación, privacidad, edición de perfil y rachas |
+| Dependencia externa | Servicio de email; debe mockearse en pruebas |
 
 ## 1. Pirámide de testing de este proyecto
 
 ```
        E2E (Playwright)         ← acotado a los flujos críticos (ver Parámetros)
-   Integración (RTL + MSW)      ← la mayoría de la cobertura útil vive acá
+   Integración (RTL + mocks)    ← la mayoría de la cobertura útil vive acá
 Unitarios (Vitest, funciones puras)  ← helpers, schemas Zod, lógica de derivación
 ```
 
 - E2E se justifica en el puñado de flujos donde el costo de un fallo real (frente a la audiencia real del producto) es alto — no como cobertura por defecto de cada pantalla.
 - Un helper puro (ver ejemplos en Parámetros) se testea unitariamente sin montar ningún componente — es más rápido y señala exactamente dónde está el bug si falla.
 
-## 2. Mocks de la API externa con MSW
+## 2. Pruebas de API y servicios
 
-- **Nunca llamadas reales a la API en tests** — siempre mockeadas con MSW, usando el mismo schema Zod que `frontend` define en runtime como contrato del mock (si el mock no respeta el schema real, el test certifica un contrato que el código no valida de verdad).
-- Casos de fallo de la API que todo hook/componente que la consume debe tener cubiertos en tests:
-  - `404` — recurso inexistente (usuario/repositorio).
-  - `403` — rate limit excedido (una API pública sin autenticar tiene un límite bajo; es el caso real más probable de fallo en producción).
-  - Timeout / sin conexión.
-  - Respuesta malformada o con campos ausentes (la API real no siempre coincide 1:1 con lo documentado).
-- Un componente que solo tiene test del caso feliz (200 con datos completos) no está cubierto — el caso feliz lo escribe cualquiera, encontrar dónde se rompe es el valor del testing.
+- No accedas a servicios externos en pruebas unitarias/integración; mockea email y dependencias de infraestructura con los patrones Nest existentes.
+- Comprueba permisos, validación, respuestas 4xx/5xx y filtrado de datos privados, además del caso feliz.
+- Los mocks de contrato deben ajustarse a `packages/shared-types`; evita mantener formas incompatibles por app.
 
 ## 3. Qué testear (comportamiento observable)
 
@@ -49,14 +44,14 @@ Unitarios (Vitest, funciones puras)  ← helpers, schemas Zod, lógica de deriva
 ## 4. Setup técnico (Vitest + RTL + jsdom)
 
 - Entorno `jsdom` explícito en tests de componentes (`// @vitest-environment jsdom` si el proyecto no lo fija global).
-- `react-i18next` se mockea en tests de UI en vez de esperar su init asíncrono real — evita flaky tests por timing de carga de idioma.
+- Mockea las dependencias externas y mantén fixtures alineadas con los contratos compartidos.
 - Al testear componentes que usan TanStack Router/Query, usa el setup de render con providers reales (`createRouter` de test, `QueryClientProvider` con un `QueryClient` nuevo por test) — no asumas comportamiento de router/query sin el provider correspondiente.
 - Sin `setTimeout` real, sin fechas/horas sin mockear, sin estado compartido entre tests sin limpiar (`afterEach` con cleanup) — estas son las causas más comunes de flaky tests en este stack.
 
 ## 5. Un test flaky es un bug
 
 - Si un test falla intermitentemente sin cambios de código, se investiga la causa raíz (timing, orden de tests, mock de red mal configurado) — nunca se resuelve reintentando ni se silencia con `skip`.
-- La causa más común: un mock de MSW no reseteado entre tests, o una animación (ej. Framer Motion) no desactivada en el entorno de test que introduce timing real.
+- La causa más común: mocks no limpiados entre tests o dependencias asíncronas que introducen timing real.
 
 ## 6. Cobertura con criterio
 
@@ -70,8 +65,8 @@ Unitarios (Vitest, funciones puras)  ← helpers, schemas Zod, lógica de deriva
 
 ## 8. Checklist rápido al escribir/revisar tests
 
-- [ ] ¿Están cubiertos los casos negativos de la API externa (`404`, `403`/rate limit, timeout, respuesta malformada), no solo el `200` feliz?
-- [ ] ¿Los mocks de MSW respetan el mismo schema Zod que valida `frontend` en runtime?
+- [ ] ¿Están cubiertos errores, permisos y datos inválidos además del caso feliz?
+- [ ] ¿Los datos de prueba respetan los schemas compartidos?
 - [ ] ¿Se testea comportamiento observable (`getByRole`) y no implementación interna?
 - [ ] ¿Están cubiertos loading/error/vacío/éxito en componentes con fetch?
 - [ ] ¿Hay determinismo — sin `setTimeout` real, sin fechas sin mockear, sin estado compartido entre tests?

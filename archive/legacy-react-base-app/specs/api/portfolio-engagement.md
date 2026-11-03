@@ -1,5 +1,7 @@
 # Portfolio Engagement — Contrato de API (Analítica + Leads)
 
+> Archivo histórico de `react-base-app`; no es un contrato activo de La Racha.
+
 **Base path**: `/api/v1`
 **Agente dueño**: `backend` (API propia NestJS)
 **Consumido por**: `frontend` (páginas `/contact` y `/dashboard`), `qa-tester`

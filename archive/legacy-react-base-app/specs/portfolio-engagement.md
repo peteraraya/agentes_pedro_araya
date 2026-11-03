@@ -1,5 +1,7 @@
 # Portfolio Engagement — Analítica de visitas + Leads de contacto
 
+> Archivo histórico de `react-base-app`; no es una especificación activa de La Racha.
+
 **Estado**: `en diseño`
 **Agentes involucrados**: designer, backend, frontend, qa-tester
 

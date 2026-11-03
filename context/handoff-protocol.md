@@ -2,7 +2,7 @@
 
 Este documento define **cómo se pasa trabajo de un agente a otro** dentro de un flujo coordinado por el orquestador (`/orchestration/orchestrator.md`). Un handoff mal definido es la causa más común de que dos agentes produzcan resultados incompatibles. Todo handoff sigue este formato — no se pasa trabajo de forma implícita o resumida en prosa.
 
-> Adaptado a `react-base-app`: proyecto **full-stack** — el backend NestJS define la API propia (handoff `backend → frontend`) y el frontend consume además la API pública de GitHub. Donde una feature toca datos nuevos, el flujo es `designer → backend → frontend → qa-tester`.
+> Adaptado a La Racha: proyecto **full-stack** — el backend NestJS define la API propia (handoff `backend → frontend`). Donde una feature toca datos nuevos, el flujo es `designer → backend → frontend → qa-tester`. La API pública del directorio solo devuelve información expresamente opt-in.
 
 ## Estructura de un handoff
 
@@ -26,7 +26,7 @@ Este documento define **cómo se pasa trabajo de un agente a otro** dentro de un
 
 ### 1. `designer` → `frontend`
 
-**Entrega**: especificación de UX/UI — flujo de usuario, wireframe/mockup (o descripción visual detallada si no hay render), estados completos del componente (default/hover/focus/loading/error/vacío), valores exactos de diseño (espaciado, color de la paleta `blue`, tipografía).
+**Entrega**: especificación de UX/UI — flujo de usuario, wireframe/mockup (o descripción visual detallada si no hay render), estados completos del componente (default/hover/focus/loading/error/vacío), valores de diseño según `/context/design-tokens.md`.
 
 **Restricción clave**: `frontend` no reinterpreta ni simplifica los estados definidos por `designer` sin señalarlo — si un estado es técnicamente costoso de implementar, se reporta como conflicto al orquestador, no se omite silenciosamente.
 
@@ -50,13 +50,13 @@ Este documento define **cómo se pasa trabajo de un agente a otro** dentro de un
 
 **Restricción clave**: `qa-tester` no se limita a los casos que el agente señaló — los toma como punto de partida, no como el universo completo de casos a cubrir. Para la API propia, verifica el contrato real publicado (e2e con Supertest), no el shape "que le parezca".
 
-### 5. Contrato de la API externa de GitHub
+### 5. Servicios externos (cuando aplique)
 
-**Aplica cuando**: el frontend consume la API de GitHub directamente (vía TanStack Query) o el backend decide exponerla a través de su API propia.
+**Aplica cuando**: una feature integra un proveedor externo, como email.
 
-**Entrega**: el schema Zod exacto que valida la respuesta de la API de GitHub para el recurso en cuestión (definido por quien consuma el recurso), más los casos de fallo conocidos (rate limit, 404, campos ocasionalmente ausentes en la respuesta real).
+**Entrega**: interfaz del proveedor, configuración requerida y casos de fallo conocidos, con dependencias mockeables para pruebas.
 
-**Restricción clave**: ese schema es la fuente de verdad para los mocks de MSW que `qa-tester` escribe — no se inventa un shape de respuesta distinto al que el código realmente valida en runtime, o los tests certifican un contrato que el código no respeta.
+**Restricción clave**: no introducir credenciales ficticias ni llamadas reales en pruebas automatizadas.
 
 ### 6. `qa-tester` → `frontend`, `backend` o `designer` (hallazgo de bug o gap)
 
@@ -68,5 +68,5 @@ Este documento define **cómo se pasa trabajo de un agente a otro** dentro de un
 
 - **El artefacto de un handoff es siempre concreto y completo** — contrato de API real, código real, schema real, especificación real. Nunca "el componente debería tener algo como..." sin la definición exacta.
 - **Toda restricción no respetada se reporta como conflicto al orquestador**, no se resuelve unilateralmente entre dos agentes sin que quede registrado.
-- **Un handoff que introduce una convención reutilizable** (ej. un patrón de manejo de errores de la API de GitHub o de la API propia adoptado en el proceso) se registra en `/context/project-context.md`, sección "Decisiones de arquitectura registradas" — para que el próximo flujo no tenga que redescubrirlo.
+- **Un handoff que introduce una convención reutilizable** (por ejemplo, manejo de errores de la API propia) se registra en `/context/project-context.md`, sección "Decisiones de arquitectura" — para que el próximo flujo no tenga que redescubrirlo.
 - Si el contrato de la API propia cambia, `backend` actualiza `/specs/api-contract-template.md` en el mismo PR que el código — un contrato desactualizado es peor que no tener contrato, porque genera falsa confianza.

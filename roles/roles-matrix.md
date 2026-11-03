@@ -6,21 +6,21 @@ Referencia rápida de quién hace qué dentro del equipo de agentes. Complementa
 
 | Rol | Archivo | Responsable de | No responsable de |
 |---|---|---|---|
-| **Frontend Senior** | `/agents/frontend.md` | Componentes React/TanStack, ruteo, estado cliente (TanStack Query/Zustand), consumo de la API propia y de la API pública de GitHub, visualización de datos, rendimiento de carga/render | Definir el contrato de la API propia (lo expone `backend`), decisiones de identidad visual de marca |
-| **Backend Senior** | `/agents/backend.md` | API propia (NestJS), DTOs/validación, autenticación/autorización, base de datos (TypeORM/Prisma), contratos de datos de la API propia, integración con APIs externas, infraestructura y despliegue (Docker/K8s/CI) | Implementación de UI, decisiones de identidad visual, consumo cliente de las APIs |
-| **Diseñador UX/UI** | `/agents/designer.md` | Flujo de usuario, jerarquía visual, sistema de diseño, especificación de estados e interacción, accesibilidad de la interfaz | Implementación de código, decisiones de arquitectura técnica, viabilidad final de performance (la señala `frontend`) |
-| **QA Engineer** | `/agents/qa-tester.md` | Estrategia y automatización de testing (frontend y backend), identificación de casos límite, reportes de bugs reproducibles, gates de calidad en CI | Corregir el bug que encuentra (lo reporta al agente responsable), decisiones de producto sobre qué comportamiento es "correcto" cuando no está definido |
+| **Frontend Senior** | Definido en esta matriz | Componentes React/TanStack, ruteo, estado de servidor (TanStack Query), consumo de la API propia, rendimiento y accesibilidad | Definir el contrato de la API propia (lo expone `backend`), decisiones de identidad visual de marca |
+| **Backend Senior** | Definido en esta matriz | API NestJS, DTOs/validación, autenticación/autorización, PostgreSQL/Prisma, contrato de API, email transaccional e infraestructura | Implementación de UI, decisiones de identidad visual, consumo cliente de las APIs |
+| **Diseñador UX/UI** | Definido en esta matriz | Flujo de usuario, jerarquía visual, sistema soft-pop de La Racha, especificación de estados e interacción, accesibilidad | Implementación de código, decisiones de arquitectura técnica, viabilidad final de performance (la señala `frontend`) |
+| **QA Engineer** | Definido en esta matriz | Estrategia y automatización de testing (frontend y backend), identificación de casos límite, reportes de bugs reproducibles, gates de calidad en CI | Corregir el bug que encuentra (lo reporta al agente responsable), decisiones de producto sobre qué comportamiento es "correcto" cuando no está definido |
 | **Orquestador** | `/orchestration/orchestrator.md` | Clasificar solicitudes, secuenciar el flujo entre agentes, gestionar handoffs, mantener `/context` coherente, escalar conflictos al usuario | Ejecutar trabajo especializado de cualquier agente directamente |
 
 ## Matriz de decisión rápida — "¿a quién le corresponde esto?"
 
-| Tipo de solicitud | Agente(s) principal(es) | Secuencia sugerida |
+| Tipo de solicitud | Rol(es) principal(es) | Secuencia sugerida |
 |---|---|---|
 | Nueva feature de punta a punta (UI + datos) | `designer` → `frontend` → `qa-tester` | Completa, ver `orchestrator.md` |
 | Feature full-stack con API propia (endpoints nuevos) | `designer` → `backend` (contrato) → `frontend` (consumo) → `qa-tester` | Completa con backend |
 | Endpoint nuevo / módulo de backend (sin UI) | `backend` → `qa-tester` | Corta backend |
 | Contrato de API nueva / cambio de contrato | `backend` (define el contrato) → `frontend` (consume) → `qa-tester` | Contract primero |
-| Integración con API externa (GitHub) | `backend` (proxy) o `frontend` (directo) según cómo se consuma | Según arquitectura |
+| Integración con servicio externo (correo/OAuth) | `backend` | Backend → QA |
 | Infraestructura / despliegue (Docker, K8s, CI/CD) | `backend` (con `devops-docker-kubernetes`) → `qa-tester` (smoke) | Técnica, sin `designer` |
 | Nuevo componente visual sin datos nuevos | `designer` → `frontend` | Corta |
 | Bug reportado en producción | `qa-tester` (reproduce y diagnostica) → agente dueño del artefacto (fix) → `qa-tester` (test de regresión) | Cíclica |

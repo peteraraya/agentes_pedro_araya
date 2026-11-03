@@ -1,8 +1,8 @@
 # ADAPTING.md — Guía de adaptación a otro proyecto
 
-> **Documento único y obligatorio de adaptación.** Si vas a usar este repositorio de agentes con un proyecto **distinto de `react-base-app`**, lee este archivo **antes** de hacer cualquier cosa. Define exactamente qué archivos tocar, en qué orden, y qué se rompe si te saltas alguno.
+> **Adaptación actualizada:** este workspace ya está configurado para La Racha. Este documento conserva la guía para futuras adaptaciones; no uses las instrucciones de `react-base-app` como contexto del proyecto actual. La fuente de verdad vigente es [`context/project-context.md`](context/project-context.md), junto con `specs/la-racha-mvp.md` y `specs/api/la-racha.md`.
 >
-> El resto del repo está acoplado a `react-base-app`. No hay forma de usarlo "tal cual" con otro proyecto sin adaptarlo — la adaptación no es opcional ni cosmética.
+> La guía siguiente describe el acoplamiento histórico a `react-base-app` y el procedimiento general para futuras adaptaciones.
 
 ---
 

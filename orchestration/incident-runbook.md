@@ -2,7 +2,7 @@
 
 Proceso operativo para cuando algo falla en producción. Complementa la teoría de resiliencia de `cicd-expert-pipelines` con el **procedimiento real de quién hace qué, en qué orden**, coordinado por `orchestrator`.
 
-> Adaptado a `react-base-app`: **full-stack** — frontend SPA (Vite) desplegado en Vercel + backend NestJS con base de datos e infraestructura de contenedores (ver `/context/project-context.md`). El equipo son 4 agentes (`designer`, `frontend`, `backend`, `qa-tester`). La API de GitHub se consume según cómo esté implementado: directo desde `frontend` o vía la API propia de `backend`. Los incidentes de infraestructura (contenedores, base de datos, deploys) los asume `backend`.
+> Adaptado a La Racha: frontend SPA (Vite/React), API NestJS y PostgreSQL. El despliegue de producción aún no está definido; no asumas Vercel ni Kubernetes. Los incidentes de API, base de datos e infraestructura corresponden a `backend`.
 
 ## Principio rector
 
@@ -13,8 +13,8 @@ En un incidente activo, **primero se restaura el servicio, después se investiga
 | Nivel | Definición | Tiempo de respuesta esperado |
 |---|---|---|
 | **SEV1 — Crítico** | El sitio no carga, un token/secreto quedó expuesto en el repo, o hay una vulnerabilidad activa (ej. XSS) explotable | Inmediato, todo lo demás se pausa |
-| **SEV2 — Alto** | Una funcionalidad core del portafolio está rota o inaccesible (ej. el CV no renderiza, la integración con GitHub falla para todos los usuarios) | Mismo día |
-| **SEV3 — Medio** | Una funcionalidad secundaria o un widget puntual falla, hay workaround (ej. el calendario de contribuciones no carga pero el resto del sitio funciona) | Próximo ciclo de trabajo |
+| **SEV2 — Alto** | Una funcionalidad central está rota (ej. no se puede ingresar, crear perfil o consultar el directorio) | Mismo día |
+| **SEV3 — Medio** | Una funcionalidad secundaria falla y existe alternativa (ej. falla la sección de ranking, pero el directorio sigue disponible) | Próximo ciclo de trabajo |
 | **SEV4 — Bajo** | Cosmético o edge case de bajo impacto | Backlog normal |
 
 ## Procedimiento — SEV1/SEV2
@@ -25,20 +25,20 @@ En un incidente activo, **primero se restaura el servicio, después se investiga
 
 ### 2. Mitigación inmediata (antes de investigar la causa)
 Opciones en orden de preferencia según el caso:
-- **Rollback al deployment anterior en Vercel** — cada deploy queda versionado automáticamente; promover el deployment previo a producción es inmediato y no requiere rebuild.
+- **Rollback al deployment anterior** usando el procedimiento del proveedor configurado, si existe.
 - **Redeploy de la versión anterior del container/imagen del backend** (o rollback de la migración que rompió datos) si el incidente es de la API propia — antes de corregir la migración, se restaura el estado previo.
-- **Feature flag / desactivar el widget o sección afectada** (ej. ocultar temporalmente un componente que depende de la API de GitHub si esta empieza a fallar) si el resto del sitio puede seguir operando sin él.
+- **Desactivar temporalmente la sección afectada** si el resto del sitio puede seguir operando sin ella.
 - Si el secreto/token expuesto es la causa (SEV1), **revocar y rotar el secreto de inmediato**, independientemente de si ya se hizo rollback — un rollback de código no invalida un secreto ya filtrado en el historial de git.
 - Se documenta la acción tomada y la hora exacta — es el primer insumo del post-mortem.
 
 ### 3. Asignación al agente responsable
 `orchestrator` identifica el dominio del incidente y asigna diagnóstico al agente dueño:
-- Error de consumo/validación de la API de GitHub (datos) → `frontend` (si consume directo) o `backend` (si lo proxya)
+- Error de consumo/validación de la API propia → `backend` (contrato/servicio) o `frontend` (cliente/estado visual)
 - Error de renderizado/UI/performance de carga → `frontend`
 - Falla de la API propia, endpoints, validación, o autenticación → `backend`
 - Falla de base de datos, migraciones, o integridad de datos → `backend`
 - Falla de contenedores/Kubernetes/deploy de backend, o del pipeline de despliegue → `backend` (con la skill `devops-docker-kubernetes` / `cicd-expert-pipelines`)
-- Falla de build o del pipeline de despliegue del frontend (Vercel/GitHub Actions) → `frontend`
+- Falla de build o del pipeline de despliegue → `frontend` (web) o `backend` (API/infraestructura), según el artefacto
 - Un estado de error/vacío que nunca se diseñó y ahora causa una pantalla rota → `designer` (gap de especificación) + `frontend` (implementación del fix)
 - Confirmación de que el incidente está resuelto y no regresó → `qa-tester`
 
@@ -58,7 +58,7 @@ Documento breve, sin buscar culpables, con:
 - **Qué mitigó y qué resolvió definitivamente**
 - **Acción preventiva** — y quién es responsable de implementarla, con la tarea creada, no solo mencionada
 
-El post-mortem se registra en `/context/project-context.md` (sección "Decisiones de arquitectura registradas") si la causa raíz revela algo a corregir de forma permanente (ej. "falta manejo de rate limit en el hook de GitHub" pasa a ser una restricción conocida para el equipo, no solo un fix puntual).
+El post-mortem se registra en `/context/project-context.md` si la causa raíz revela una decisión o restricción que deba conocer el equipo.
 
 ## Procedimiento — SEV3/SEV4
 

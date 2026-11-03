@@ -1,82 +1,32 @@
-# AGENTS.md — Guía de navegación de este repositorio
+# AGENTS.md — Punto de entrada de La Racha
 
-Este archivo es el **punto de entrada** para cualquier agente de IA (opencode, Claude Code, Cursor, etc.) que trabaje en un proyecto donde esté disponible este repositorio. Su propósito es explicar **cómo se conectan los archivos `.md`** de este repo: qué contiene cada carpeta, qué leer antes de empezar, y qué convenciones respetar.
+Este directorio contiene el framework de trabajo del producto La Racha de los Desempleados. La aplicación está en la raíz del workspace; lee la documentación de contexto antes de modificar código.
 
-No es código de aplicación: este repositorio define un **equipo de agentes de IA especializados** (orquestador, frontend, backend, diseño, QA) con sus skills, contexto vivo, roles y especificaciones, preparado para trabajar sobre un **proyecto objetivo** (por defecto, `react-base-app`, full-stack: frontend Vite + backend NestJS).
+## Orden de lectura
 
-## Cómo usar este repo en cualquier proyecto
+1. [`README.md`](./README.md) — mapa del framework y del workspace.
+2. [`context/project-context.md`](./context/project-context.md) — producto, stack y reglas de privacidad.
+3. [`roles/roles-matrix.md`](./roles/roles-matrix.md) — responsabilidades y secuencia.
+4. [`orchestration/orchestrator.md`](./orchestration/orchestrator.md) — workflow para tareas.
+5. [`context/definition-of-done.md`](./context/definition-of-done.md) — validación de cierre.
+6. La spec activa en [`specs/`](./specs/) y la skill activada por el tipo de tarea.
 
-Copia/ubica este repositorio junto al proyecto objetivo y configura tu cliente de agentes para que:
+## Mapa físico
 
-1. **Cargue `AGENTS.md`** del directorio raíz (la mayoría de los clientes lo hacen por convención al abrir el repo).
-2. Use los archivos de `agents/` como definiciones de agente y `orchestration/orchestrator.md` como coordinador.
-3. Conceda acceso de lectura a `skills/`, `context/` y `specs/` a todos los agentes.
+- `orchestration/`: coordinador de flujo y runbook de incidentes.
+- `roles/`: matriz de responsabilidades del equipo conceptual.
+- `skills/`: conocimiento activado por tipo de trabajo.
+- `context/`: fuente de verdad del producto, tokens, handoffs y DoD.
+- `specs/`: especificaciones de features y contratos.
+- `apps/web/`, `apps/api/`, `packages/shared-types/`: implementación.
 
-## Orden de lectura al arrancar (nunca te saltes este flujo)
+No existe una carpeta `agents/` con subagentes ejecutables en este workspace. Los roles del flujo son responsabilidades de trabajo; cuando no hay un ejecutor dedicado disponible, el agente actual completa las etapas en secuencia y registra los handoffs concretos. No afirmes que se invocó un agente que no existe.
 
-| # | Archivo | Por qué leerlo primero |
-|---|---|---|
-| 1 | `AGENTS.md` (este) | Te da el mapa de navegación completo |
-| 2 | `README.md` | Vista general del repo, estructura y aviso de adaptación |
-| 3 | `context/project-context.md` | Contexto vivo del proyecto objetivo — **tiene prioridad sobre cualquier guía genérica** |
-| 4 | `roles/roles-matrix.md` | Para saber a qué agente enrutar cada tipo de solicitud |
-| 5 | `context/definition-of-done.md` | Para saber cuándo una entrega está realmente completa |
+## Reglas no negociables
 
-Después de este arranque, lee solo los archivos que tu tarea active (ver más abajo).
-
-> **¿Vas a trabajar con un proyecto distinto a `react-base-app`?** Antes del flujo anterior, lee [`ADAPTING.md`](./ADAPTING.md): dice qué archivos hay que modificar y en qué orden para adaptar el equipo a otro proyecto.
-
-## Mapa de los archivos `.md` y sus conexiones
-
-| Carpeta | Contiene | Archivos `.md` | Se conecta a |
-|---|---|---|---|
-| `/agents` | Definiciones de cada agente del equipo | `agents-README.md` (índice), `frontend.md`, `backend.md`, `designer.md`, `qa-tester.md` | `/orchestration` (coordinador), `/skills` (conocimiento que consumen), `/context` (reglas que respetan), `/roles` (a quién le toca qué) |
-| `/orchestration` | El agente coordinador y el runbook de incidentes | `orchestrator.md`, `incident-runbook.md` | `/agents` (a quién enruta), `/context` (reglas que hace respetar), `/specs` (cuándo una feature está completa) |
-| `/roles` | Matriz de responsabilidades | `roles-matrix.md` | `/agents` (a quién corresponde cada dominio), `/orchestration` (flujo de decisión) |
-| `/skills` | Conocimiento especializado por dominio (carpetas `<nombre>/SKILL.md`, formato que carga opencode) | `skills-README.md` (índice) | `/agents` (tablas de activación: qué agente consume qué skill), `/context` (tokens y convenciones que las skills referencian) |
-| `/context` | Contexto vivo del proyecto (convenciones, tokens, protocolos) | `project-context.md`, `design-tokens.md`, `handoff-protocol.md`, `definition-of-done.md`, `pr-convention.md` | Todo el repo: **es la fuente de verdad que todos deben consultar** |
-| `/specs` | Especificaciones de features y plantillas | `feature-spec-template.md`, `api-contract-template.md`, `career-timeline.md`, `portfolio-engagement.md`, `api/portfolio-engagement.md` | `/context` (DoD y handoffs), `/agents` (qué agente construye el feature) |
-
-## Cómo se enlazan los `.md` entre sí (el flujo de trabajo)
-
-```
-El usuario pide algo
-        │
-        ▼
-orchestration/orchestrator.md      ──► clasifica la solicitud
-        │
-        ├──► roles/roles-matrix.md      qué agente(s) corresponden
-        ├──► context/project-context.md reglas a respetar (prioridad máxima)
-        │
-        ▼
-agents/*.md (frontend | backend | designer | qa-tester)
-        │
-        ├──► skills/SKILL.md           conocimiento que ACTIVA la tarea
-        │        (vía la tabla de activación del agente)
-        ├──► context/handoff-protocol.md  al pasar trabajo al siguiente agente
-        │
-        ▼
-specs/[feature].md ──► context/definition-of-done.md → "feature completa"
-```
-
-## Reglas de navegación no negociables
-
-- **`/context` manda.** Si un archivo en cualquier carpeta contradice `context/project-context.md`, gana el contexto — nunca la guía genérica.
-- **No inventes archivos.** Solo existe lo que está físicamente en `agents/`, `skills/`, `context/`, `roles/`, `specs/` y `orchestration/`. Si una tabla menciona un archivo que no existe, es un error a corregir, no un archivo implícito.
-- **Las skills se activan, no se leen por defecto.** Un agente consulta una skill de `skills/` solo cuando su tabla de activación la dispara. No leas todo `/skills` en cada tarea.
-- **El trabajo se pasa con handoffs explícitos** (`context/handoff-protocol.md`), nunca de forma implícita o resumida.
-- **Los workflows son genéricos; lo específico vive en `/context` y en `## Parámetros del proyecto` de cada skill.** Ningún workflow (skill, agente, orquestador) debe hardcodear valores del proyecto (stack, versiones, colores, fuentes, endpoints, comandos) — al adaptar a otro proyecto se editan los parámetros y el contexto, no los cuerpos de las skills (ver `ADAPTING.md`).
-- **No confundas el repositorio de agentes con el proyecto objetivo.** Este repo describe al equipo; el proyecto objetivo es el código sobre el que se trabaja. Edita el código del proyecto objetivo, y este repo solo cuando cambie el equipo, sus skills o sus convenciones.
-
-## Al adaptar este repo a otro proyecto
-
-Si el proyecto objetivo **no es `react-base-app`**, lee obligatoriamente [`ADAPTING.md`](./ADAPTING.md) **antes** de empezar. Es el documento único que define exactamente qué archivos tocar, en qué orden y qué se rompe si te saltas alguno, con tres perfiles según el tipo de proyecto (full-stack / frontend-only / otro stack de backend).
-
-Resumen de lo no negociable:
-
-1. Empieza por `context/project-context.md` — es la fuente de verdad; todo lo demás lo referencia.
-2. Revisa `skills/` (poda y alta, con `skills/skills-README.md` al día) y cada tabla de activación en `agents/` — la fuente más común de inconsistencia.
-3. Ajusta `roles/roles-matrix.md` y las notas de alcance en `agents/agents-README.md` y `orchestration/orchestrator.md`.
-4. Si el nuevo proyecto **no tiene backend** (perfil B), elimina/reduce `agents/backend.md` y revierte las notas full-stack en `specs/`, `context/handoff-protocol.md` y `context/definition-of-done.md`.
-5. En cada skill que adaptes, edita sus valores únicamente en la sección `## Parámetros del proyecto` (y en los archivos de `/context` que referencie) — nunca el cuerpo del workflow; si algo quedó hardcodeado en un cuerpo está violando el principio de abstracción y se arregla, no se propaga.
-6. Actualiza `README.md`, `AGENTS.md` y `ADAPTING.md`, y corre la checklist de verificación §5 de `ADAPTING.md` antes del primer uso.
+- `context/project-context.md` prevalece sobre ejemplos genéricos de skills.
+- Privacidad opt-in: público y ranking son consentimientos independientes; perfiles privados no aparecen en ninguna superficie pública.
+- El contrato NestJS se publica en `specs/api/` antes de consumirse; las respuestas del navegador se validan con Zod.
+- Los datos públicos nunca incluyen correo, identificadores internos ni credenciales.
+- Mantén estados completos, accesibilidad y lenguaje empático; ver tokens y DoD.
+- Usa el flujo de `orchestration/orchestrator.md`; omite una etapa solo si no aplica y decláralo.

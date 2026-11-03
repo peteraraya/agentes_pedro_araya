@@ -5,8 +5,8 @@ Estandariza cómo el equipo (agentes y humano) propone, revisa e integra cambios
 ## Ramas
 
 - `main` — siempre desplegable, protegida (sin push directo).
-- `feature/<slug-corto>` — una feature de `/specs`, ej. `feature/career-timeline`.
-- `fix/<slug-corto>` — corrección de bug, ej. `fix/github-rate-limit-handling`.
+- `feature/<slug-corto>` — una feature de `/specs`, ej. `feature/profile-privacy`.
+- `fix/<slug-corto>` — corrección de bug, ej. `fix/profile-slug-validation`.
 - `chore/<slug-corto>` — mantenimiento sin impacto funcional (deps, configuración, docs).
 
 Slug corto en inglés, kebab-case, sin el nombre del ticket si no hay tracker externo — descriptivo por sí mismo.
@@ -20,9 +20,9 @@ Slug corto en inglés, kebab-case, sin el nombre del ticket si no hay tracker ex
 Tipos: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `ci`.
 
 ```
-feat(career): agregar timeline interactivo de trayectoria
-fix(github-api): manejar correctamente el 403 por rate limit
-test(career-timeline): cubrir heurística de ordenamiento por año
+feat(profiles): agregar controles de privacidad
+fix(auth): manejar token de verificación expirado
+test(streaks): cubrir cálculo de días por zona horaria
 ```
 
 - Un commit, un cambio lógico — no mezclar un fix con un refactor no relacionado en el mismo commit.
@@ -31,7 +31,7 @@ test(career-timeline): cubrir heurística de ordenamiento por año
 ## Pull Requests
 
 ### Título
-Mismo formato que el commit principal: `feat(career): timeline interactivo con filtro por categoría`.
+Mismo formato que el commit principal: `feat(profiles): agregar controles de privacidad`.
 
 ### Plantilla de descripción
 
@@ -53,7 +53,7 @@ Ver `/specs/[archivo].md` (si aplica)
 
 ## Checklist de Definition of Done
 Ver `/context/definition-of-done.md` — marcar solo lo aplicable a este cambio:
-- [ ] Datos externos (API de GitHub)
+- [ ] Contrato API y privacidad de datos
 - [ ] Frontend
 - [ ] Diseño
 - [ ] Testing
@@ -75,24 +75,24 @@ Quien revisa (el agente dueño del dominio si la tarea fue asignada por `orchest
 
 **Correctitud**
 - [ ] El código hace lo que el PR dice que hace, verificado contra la spec en `/specs` si existe
-- [ ] Casos límite y negativos contemplados (fallos de la API de GitHub, no solo el happy path)
+- [ ] Casos límite y negativos contemplados (errores de API/servicios, no solo el caso feliz)
 
 **Calidad**
 - [ ] Sin duplicación de conocimiento de negocio (DRY con criterio, no abstracción forzada)
 - [ ] Nombres que revelan intención; funciones/componentes con una sola responsabilidad
 - [ ] Sin `any` sin justificar; sin `console.log` en código de producción
 
-**Datos externos y configuración** (si el PR toca el consumo de la API de GitHub o maneja tokens/variables de entorno)
+**Datos y configuración** (si el PR toca la API, email, tokens o variables de entorno)
 - [ ] Validación con Zod presente para toda respuesta externa consumida
 - [ ] Sin tokens ni credenciales en el diff
-- [ ] Manejo explícito de rate limit (403) y recurso inexistente (404) donde corresponde
+- [ ] Manejo explícito de errores y respuestas inválidas
 
 **Testing**
 - [ ] Tests nuevos cubren el comportamiento agregado, no solo existen para subir el número de cobertura
 - [ ] Sin tests flaky introducidos (sin `setTimeout` real, sin dependencia de orden, sin llamadas reales a la API)
 
 **Coherencia con el sistema**
-- [ ] Respeta las convenciones de `/context/project-context.md`, incluida la restricción de acentos solo-`blue`
+- [ ] Respeta las convenciones y tokens de `/context/project-context.md`
 - [ ] No contradice una decisión de arquitectura ya registrada sin justificar por qué se aparta de ella
 - [ ] Si introduce una convención nueva, está documentada, no solo implementada
 
@@ -106,4 +106,4 @@ Quien revisa (el agente dueño del dominio si la tarea fue asignada por `orchest
 
 - Squash merge a `main` por defecto — historial limpio, un commit por PR con el mensaje final revisado.
 - Sin merges directos a `main` sin PR, incluso para cambios triviales — la protección de rama existe para eso.
-- El pipeline de CI (`cicd-expert-pipelines`) debe pasar en verde antes de habilitar el merge, sin excepciones manuales. El deploy del frontend a producción ocurre vía Vercel al mergear a `main`; el del backend sigue su pipeline propio de contenedores (Docker/Kubernetes) no el de Vercel.
+- El pipeline de CI debe pasar en verde antes de habilitar el merge. El proveedor y los pasos de despliegue quedan pendientes hasta que se definan explícitamente.

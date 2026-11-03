@@ -7,42 +7,42 @@ description: Criterio de sistema de diseño UI del proyecto actual — reglas de
 
 Los valores exactos (hex, escala, nombres de token) viven en `/context/design-tokens.md` — **fuente de verdad**, no se reinventan acá. Los valores de identidad específicos del proyecto se listan en los **Parámetros del proyecto** (abajo). Esta skill documenta el criterio de uso: qué token corresponde a qué situación, y las reglas que no son negociables al construir o revisar un componente de UI base.
 
-## Parámetros del proyecto — react-base-app (a editar al adaptar)
+## Parámetros del proyecto — La Racha
 
 > Los únicos valores específicos de esta skill. Al adaptar a otro proyecto se editan estos parámetros (y `/context/design-tokens.md`), no el cuerpo de la skill.
 
-| Parámetro | Valor actual (`react-base-app`) |
+| Parámetro | Valor actual (`La Racha`) |
 |---|---|
-| Acento decorativo | Escala `blue` de marca (único acento; ver `/context/design-tokens.md`) |
-| Colores semánticos | `green` (éxito), `red` (error), `amber`/`orange` (advertencia) — solo para estado |
-| Tipografía | `Newsreader` títulos/display; `IBM Plex Mono` código/datos técnicos |
-| Superficies | Escala `gray` fría en light y dark |
+| Paleta | Naranja principal, azul secundario, amarillo y menta según `/context/design-tokens.md` |
+| Colores semánticos | Usa los tokens de estado definidos en `/context/design-tokens.md` |
+| Tipografía | `Fraunces` y `DM Sans`, según los roles del sistema |
+| Superficies | Marfil cálido, lavanda pálido y superficies con contraste accesible |
 | Fuente de valores | `/context/design-tokens.md` |
 | Skills relacionadas | Stack: `vite-tanstack-tailwind` (ver tabla "Skills activas" en `/skills/skills-README.md`) |
 
-## 1. Regla de oro: acento decorativo único
+## 1. Regla de oro: roles de color consistentes
 
-- Todo acento decorativo (botón primario, borde activo, ícono destacado, link, foco visible) usa la escala de acento definida en Parámetros. Ningún otro matiz saturado se usa como decoración — en este proyecto fue una decisión explícita de unificación (ver `/context/project-context.md` §5).
+- Usa cada color según su rol definido en los tokens. El naranja es el acento principal; el azul, amarillo y menta son colores de apoyo, no acentos intercambiables.
 - **Excepción, no violación**: los colores semánticos (ver Parámetros) comunican estado, no decoran — se usan exclusivamente para eso, nunca como acento estético alternativo al de marca.
-- Antes de aceptar un pedido de "un toque de color distinto" en un elemento decorativo, señala el conflicto con esta regla explícitamente — no cedas en silencio (ver `designer.md`/`frontend.md`, sección de autonomía operativa).
+- No agregues colores fuera de la paleta sin una decisión explícita y una revisión de contraste.
 
 ## 2. Componentes base — variantes antes que duplicados
 
 - Un componente de UI base (botón, input, badge, card) tiene sus variantes definidas por prop (`variant`, `size`), no por copias del componente con estilos ligeramente distintos. Si necesitas "un botón un poco distinto", primero revisa si es una variante nueva del componente existente.
-- Estados obligatorios en todo componente interactivo: `default`, `hover`, `focus`, `active`, `disabled`, `loading`, `error` (si aplica), vacío (si el componente puede no tener contenido) — un componente que solo define `default` no está completo.
+- Estados relevantes en todo componente interactivo: `default`, `hover`, `focus`, `active`, `disabled`, `loading` y `error` (si aplica).
 - El estado `focus` es siempre visible (ring/outline con el color de acento de marca, ver Parámetros) y sigue un orden de tabulación lógico — nunca `outline: none` sin un reemplazo visible equivalente.
 
 ## 3. Contraste — verificado, no asumido
 
 - WCAG AA como mínimo: 4.5:1 para texto normal, 3:1 para texto grande y elementos gráficos (incluye gráficos de `recharts-charts`). Se verifica el par real light/dark que se va a usar, no se asume que "el color de marca siempre contrasta bien" — algunos tonos del acento no cumplen AA sobre ciertos fondos; el token correcto por contexto está documentado en `/context/design-tokens.md`.
 - Ningún estado o información crítica se comunica solo por color — el error de un input, por ejemplo, lleva también texto/ícono, no solo un borde rojo.
-- Tamaños de objetivo táctil mínimos (~44x44px) en cualquier control interactivo pensado para touch (mobile).
+- Tamaños de objetivo táctil cómodos en cualquier control interactivo pensado para touch (mobile).
 
 ## 4. Tipografía y espaciado
 
 - Escala tipográfica limitada (definida en `/context/design-tokens.md`) — no se introduce un tamaño de fuente nuevo "a ojo" cuando la escala ya cubre el caso.
 - Las familias por rol definidas en Parámetros (display/técnico) — un tercer tipo de letra es una decisión de identidad, no un ajuste de componente puntual (ver `frontend-design`).
-- Espaciado en la escala de Tailwind (múltiplos de 4px) — un valor arbitrario (`p-[13px]`) rompe el ritmo visual y es señal de que falta un token o de que el layout no está resuelto del todo.
+- Espaciado según los tokens CSS del proyecto; evita valores arbitrarios que rompan el ritmo visual.
 
 ## 5. Dark mode como ciudadano de primera clase
 
@@ -57,7 +57,7 @@ Los valores exactos (hex, escala, nombres de token) viven en `/context/design-to
 
 ## 7. Checklist rápido al crear/revisar un componente de UI base
 
-- [ ] ¿El único acento decorativo es el de Parámetros? ¿Los colores semánticos se usan solo para estado?
+- [ ] ¿Se usan los colores según los roles establecidos en Parámetros y los colores semánticos solo para estados?
 - [ ] ¿Están definidos los estados default/hover/focus/active/disabled (+ loading/error/vacío si aplica)?
 - [ ] ¿El foco es visible y sigue un orden de tabulación lógico?
 - [ ] ¿El contraste (texto, iconografía, bordes de estado) cumple WCAG AA en light y dark, verificado contra `/context/design-tokens.md`?

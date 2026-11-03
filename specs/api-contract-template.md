@@ -1,8 +1,8 @@
 # Plantilla de Contrato de API
 
-Formaliza como artefacto publicado y versionado el contrato de datos externos que `frontend` define al consumir una API (ver `/context/handoff-protocol.md`, handoff 2 y 3), en vez de dejarlo solo como un bloque de código Zod pegado en la conversación. Copia esta plantilla a `/specs/api/[recurso].md` por cada recurso/endpoint externo nuevo o modificado.
+Formaliza como artefacto publicado y versionado el contrato de la API propia para que frontend y QA lo consulten junto con los schemas compartidos. Copia esta plantilla a `/specs/api/[recurso].md` por cada recurso/endpoint nuevo o modificado.
 
-> Adaptado a `react-base-app`: proyecto **full-stack** — el equipo es `designer`, `frontend`, `backend`, `qa-tester`. Esta plantilla documenta la **API propia de NestJS** (dueño del recurso: `backend`) y también, si corresponde, el **contrato de recursos externos** consumidos por el proyecto (ej. API de GitHub), cuyo dueño es quien consuma el recurso (`frontend` si directo, `backend` si lo expone a través de su API). Ver `/context/project-context.md` §4 y `/agents/agents-README.md`.
+> Para La Racha, `backend` define el contrato de la API NestJS y `frontend` consume los schemas de `packages/shared-types`.
 
 ## Por qué existe esto además del schema Zod
 
@@ -13,7 +13,7 @@ El schema Zod en el código es la fuente de verdad en tiempo de ejecución, pero
 ## [Recurso] — ej. `Users`
 
 **Base path**: `/api/v1/users`
-**Agente dueño**: `backend` (API propia). Para recursos externos consumidos (ej. API de GitHub), el dueño es quien consuma el recurso — ver nota de adaptación arriba.
+**Agente dueño**: `backend`
 **Consumido por**: `frontend` (especificar página/feature), `qa-tester`
 
 ### `POST /api/v1/users`

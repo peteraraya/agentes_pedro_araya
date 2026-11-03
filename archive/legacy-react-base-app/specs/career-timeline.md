@@ -1,5 +1,7 @@
 # Career Timeline (Línea de Tiempo Interactiva)
 
+> Archivo histórico de `react-base-app`; no es una especificación activa de La Racha.
+
 **Estado**: `completa`
 **Agentes involucrados**: designer, frontend, qa-tester
 
