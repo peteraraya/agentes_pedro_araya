@@ -1,4 +1,4 @@
-# Framework de desarrollo — La Racha
+# Framework de desarrollo
 
 Guías de orquestación, contexto, skills y contratos para implementar La Racha de los Desempleados. La aplicación vive en `../apps/`; el producto es una SPA Vite/React + TanStack y una API NestJS/PostgreSQL.
 

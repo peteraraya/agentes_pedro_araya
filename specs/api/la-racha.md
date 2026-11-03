@@ -10,9 +10,9 @@ Las rutas devuelven `{ statusCode, message, error? }`; errores de validación so
 
 ## Directorio público
 
-### `GET /public/profiles?q=&country=&cursor=&limit=`
+### `GET /public/profiles?q=&country=&category=&keyword=&cursor=&limit=`
 
-Sin autenticación. `200 { items: PublicProfile[], nextCursor: string | null }`. Solo perfiles con visibilidad `PUBLIC`, consentimiento de publicación concedido, usuario activo y racha activa. `limit` máximo 24.
+Sin autenticación. `200 { items: PublicProfile[], nextCursor: string | null }`. Solo perfiles con visibilidad `PUBLIC`, consentimiento de publicación concedido, usuario activo y racha activa. `limit` máximo 24. `category` filtra la categoría profesional; se puede repetir `keyword` hasta 10 veces y los resultados coinciden con al menos una palabra clave seleccionada. Los filtros se combinan entre sí.
 
 ### `GET /public/profiles/:slug`
 
@@ -30,11 +30,11 @@ Sin autenticación. `200 { publicProfiles: number }`; solo cuenta perfiles visib
 
 ### `POST /auth/register`
 
-Body: `{ email, password, lastWorkDay, displayName, displayMode, publicProfileConsent, rankingConsent }`. Password: 12–128 caracteres; `lastWorkDay` fecha ISO no futura; consentimientos booleanos y términos aceptados. Crea usuario, perfil, racha y eventos de consentimiento atómicamente. `201 { accessToken, user, profile }`, `400`, `409`.
+Body: `{ email, password, lastWorkDay, displayName, displayMode, publicProfileConsent, rankingConsent }`. Password: 12–128 caracteres; `lastWorkDay` fecha ISO no futura; consentimientos booleanos y términos aceptados. Crea usuario, perfil, racha y eventos de consentimiento atómicamente. Si la verificación está habilitada, envía el enlace y responde `201 { emailVerificationRequired: true }` sin emitir sesión; de lo contrario, responde `201 { accessToken, user, profile }`. `400`, `409`.
 
 ### `POST /auth/login`
 
-Body `{ email, password }`. `200 { accessToken, user, profile }`; `401` para cualquier combinación incorrecta; `429` por límite de intentos.
+Body `{ email, password }`. `200 { accessToken, user, profile }`; `401` para credenciales incorrectas o correo pendiente de verificación; `429` por límite de intentos. Los endpoints autenticados requieren una cuenta activa y verificada.
 
 ### `POST /auth/verify-email`
 
@@ -48,7 +48,7 @@ Bearer JWT requerido. `200 { user, profile, streak }`; `401` si falta o expiró 
 
 ### `GET/PATCH /me/profile`
 
-Devuelve el perfil privado. PATCH acepta solo `displayName`, `displayMode`, `headline`, `bio`, `country`, `city`, `linkedinUrl`, `visibility`, `showInRanking`, `showStreakCount`. `visibility=PUBLIC` requiere consentimiento concedido; `200` devuelve el perfil propio sin credenciales.
+Devuelve el perfil privado. PATCH acepta `displayName`, `displayMode`, `headline`, `bio`, `country`, `city`, `industry`, `keywords`, `linkedinUrl`, `visibility`, `showInRanking`, `showStreakCount`. `keywords` acepta hasta 10 términos de 40 caracteres y se normaliza sin distinguir mayúsculas. `visibility=PUBLIC` requiere consentimiento concedido; `200` devuelve el perfil propio sin credenciales.
 
 ### `PUT /me/streak`
 
@@ -68,6 +68,6 @@ Elimina la cuenta autenticada y sus datos asociados; `204`. No acepta IDs de usu
 
 ## Forma pública
 
-`PublicProfile = { slug, displayName, displayMode, headline, bio, country, city, avatarUrl, industry, linkedinUrl, showStreakCount, streak?: { days, startDate, selfDeclared: true } }`.
+`PublicProfile = { slug, displayName, displayMode, headline, bio, country, city, avatarUrl, industry, keywords, linkedinUrl, showStreakCount, streak?: { days, startDate, selfDeclared: true } }`.
 
 `RankedProfile` es `PublicProfile` sin enlaces externos opcionales. No incluir email, `userId`, fecha de nacimiento o estado de verificación.
