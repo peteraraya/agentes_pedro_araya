@@ -1,4 +1,4 @@
-# MVP — La Racha
+# MVP — Rompe la Racha
 
 **Estado**: en desarrollo  
 **Flujo**: diseño → contrato/backend → frontend → QA
@@ -7,11 +7,13 @@
 
 Permitir que una persona cree una cuenta y una racha autodeclarada, controle su perfil público y sea descubierta solo cuando da consentimiento explícito.
 
-Incluye autenticación por email/contraseña, verificación de email, perfil y racha editables, directorio público con búsqueda básica, perfil público SEO-friendly en el cliente y ranking opt-in. Excluye mensajería, reclutadores, Google OAuth, pagos, ranking con reacciones, notificaciones, exportación de datos y despliegue CI/CD.
+Incluye autenticación por email/contraseña, verificación de email, perfil y racha editables, directorio público con búsqueda, perfil público SEO-friendly en el cliente, selección semanal opt-in del Hall, pausa voluntaria de la vitrina, recordatorios periódicos de disponibilidad, reportes con moderación administrativa y métricas agregadas de exposición. Excluye mensajería, flujos para reclutadores, Google OAuth, pagos, interacciones competitivas, notificaciones generales, exportación de datos y despliegue CI/CD.
 
 ## UX y reglas
 
 - Perfil privado por defecto; la publicación y participación en ranking tienen controles independientes.
+- Pausar es voluntario y no ocurre automáticamente por falta de confirmación; reactivar no reinscribe en el Hall.
+- Reportes revisados por administración; las métricas de exposición cuentan apariciones agregadas, nunca visitantes identificables.
 - Fecha de fin de empleo obligatoria en el registro, no futura y descrita como autodeclarada.
 - Puede usarse seudónimo; correo nunca aparece en vistas públicas.
 - Estados de carga, error, vacío y éxito; navegación por teclado y textos sin depender solo del color.
@@ -26,7 +28,9 @@ El contrato publicado está en [`api/la-racha.md`](./api/la-racha.md). El backen
 - Registro crea cuenta, perfil privado, racha activa y consentimientos versionados en una transacción.
 - Fechas futuras, payloads desconocidos, email duplicado y credenciales incorrectas se rechazan.
 - Solo un perfil público con consentimiento concedido aparece en directorio y estadísticas públicas.
-- Solo un usuario que opta por ranking aparece en el top 10.
+- Perfiles pausados desaparecen del directorio, del perfil público, las estadísticas y el Hall.
+- Recordatorios de disponibilidad no alteran la publicación; reportes y métricas de exposición son privados para administración.
+- Solo una persona que opta por el Hall aparece en la selección rotativa semanal; no hay posiciones por duración.
 - Perfil público omite email y otros campos privados.
 - Usuario puede cambiar su perfil/visibilidad/racha propia o solicitar eliminación de su cuenta.
 - Los días se calculan desde la fecha de inicio y nunca se guardan como contador.

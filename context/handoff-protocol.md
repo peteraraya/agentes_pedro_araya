@@ -2,7 +2,7 @@
 
 Este documento define **cómo se pasa trabajo de un agente a otro** dentro de un flujo coordinado por el orquestador (`/orchestration/orchestrator.md`). Un handoff mal definido es la causa más común de que dos agentes produzcan resultados incompatibles. Todo handoff sigue este formato — no se pasa trabajo de forma implícita o resumida en prosa.
 
-> Adaptado a La Racha: proyecto **full-stack** — el backend NestJS define la API propia (handoff `backend → frontend`). Donde una feature toca datos nuevos, el flujo es `designer → backend → frontend → qa-tester`. La API pública del directorio solo devuelve información expresamente opt-in.
+> Adaptado a Rompe la Racha: proyecto **full-stack** — el backend NestJS define la API propia (handoff `backend → frontend`). Donde una feature toca datos nuevos, el flujo es `designer → backend → frontend → qa-tester`. La API pública del directorio solo devuelve información expresamente opt-in.
 
 ## Estructura de un handoff
 

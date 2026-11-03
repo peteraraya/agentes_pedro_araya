@@ -1,11 +1,11 @@
 # Contexto del proyecto
 
-Fuente única de verdad para el producto La Racha de los Desempleados. Si otra guía del equipo contradice este archivo, prevalece este contexto.
+Fuente única de verdad para el producto Rompe la Racha. Si otra guía del equipo contradice este archivo, prevalece este contexto.
 
 ## 1. Producto
 
-- **Nombre**: La Racha de los Desempleados.
-- **Propuesta**: vitrina voluntaria para que personas en búsqueda activa sean descubiertas por reclutadores.
+- **Nombre**: Rompe la Racha.
+- **Propuesta**: ayudar a que el talento en búsqueda activa sea visible y acompañar el proceso personal sin prometer empleo.
 - **Audiencia**: candidatos y reclutadores en Chile y Latinoamérica.
 - **Principio central**: celebrar la constancia sin estigmatizar el desempleo. Usar “días de búsqueda activa”; presentar cada dato público como autodeclarado.
 - **Privacidad**: perfiles privados por defecto, consentimiento explícito y granular para publicar y aparecer en el ranking, seudónimo disponible, sin publicar correo ni teléfono. Ocultar o eliminar la cuenta debe ser una acción clara.
@@ -13,7 +13,7 @@ Fuente única de verdad para el producto La Racha de los Desempleados. Si otra g
 
 ## 2. Alcance actual y stack
 
-El alcance de implementación inicial es la Fase 1 (MVP) del plan de producto La Racha.
+El alcance de implementación inicial es la Fase 1 (MVP) del plan de producto Rompe la Racha.
 
 | Capa | Tecnología | Convención |
 |---|---|---|
@@ -52,8 +52,11 @@ No usar Next.js, GitHub API, Zustand, PWA, Kubernetes ni servicios externos que 
 ## 5. Identidad visual y contenido
 
 - Tono cálido y empático. Nunca llamar a una persona “fracasada” ni usar el tiempo sin empleo como una competición.
-- Frase de marca: “Tu racha dice cuánto has insistido. Que te encuentren.”
-- El ranking se titula “Hall de la Resiliencia”, es opt-in y ofrece contexto de apoyo.
+- Frase de marca: “Tu talento sigue en movimiento. Que te encuentren.”
+- El Hall de la Resiliencia es una selección opt-in de perfiles que rota semanalmente; no asigna puestos ni ordena por días.
+- Los hitos son referencias personales opcionales; no medir valor, éxito ni empleabilidad.
+- La pausa de la vitrina es voluntaria; no se despublica un perfil por falta de respuesta a recordatorios.
+- La moderación de reportes y las métricas de exposición son privadas para administración; las métricas son agregadas y no identifican visitantes.
 - La duración y cualquier badge se acompañan de texto; no depender solo del color.
 - Usar los tokens documentados en `design-tokens.md`; diseñar estados de carga, error, vacío y éxito, además de teclado y foco visible.
 
@@ -78,5 +81,5 @@ No usar Next.js, GitHub API, Zustand, PWA, Kubernetes ni servicios externos que 
 
 - **Racha**: días consecutivos desde el último día trabajado, calculados desde una fecha autodeclarada.
 - **Perfil público**: perfil publicado con consentimiento afirmativo; privado por defecto.
-- **Hall de la Resiliencia**: ranking voluntario separado del consentimiento de publicación del perfil.
+- **Hall de la Resiliencia**: selección voluntaria rotativa, separada del consentimiento de publicación y sin posiciones competitivas.
 - **Reclutador**: rol previsto para una fase posterior; mensajería y verificación de empresa no forman parte del MVP inicial.

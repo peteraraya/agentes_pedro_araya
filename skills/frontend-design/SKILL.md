@@ -9,11 +9,11 @@ Guía metodológica para que cualquier pantalla o componente nuevo se sienta par
 
 Principio rector: **cada decisión visual tiene una razón funcional (jerarquía, legibilidad, consistencia), nunca "porque se ve bien" sin más**. Si no puedes explicar por qué un elemento es más grande, más oscuro o está más separado que otro, probablemente esa decisión todavía no está tomada.
 
-## Parámetros del proyecto — La Racha
+## Parámetros del proyecto — Rompe la Racha
 
 > Los únicos valores específicos de esta skill. Al adaptar a otro proyecto se editan estos parámetros (y los archivos de `/context` que referencian), no el cuerpo de la skill.
 
-| Parámetro | Valor actual (`La Racha`) |
+| Parámetro | Valor actual (`Rompe la Racha`) |
 |---|---|
 | Contexto del producto | Comunidad y directorio voluntario de personas en búsqueda activa de empleo; foco en privacidad, dignidad, agencia y constancia |
 | Paleta | Naranja como acento principal, azul para contraste, amarillo y menta en usos definidos por `/context/design-tokens.md` |

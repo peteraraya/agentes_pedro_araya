@@ -1,4 +1,4 @@
-# Hitos de racha — La Racha
+# Hitos de racha — Rompe la Racha
 
 **Estado**: `completa`  
 **Agentes involucrados**: backend, frontend, qa-tester

@@ -1,6 +1,6 @@
 # Framework de desarrollo
 
-Guías de orquestación, contexto, skills y contratos para implementar La Racha de los Desempleados. La aplicación vive en `../apps/`; el producto es una SPA Vite/React + TanStack y una API NestJS/PostgreSQL.
+Guías de orquestación, contexto, skills y contratos para implementar Rompe la Racha. La aplicación vive en `../apps/`; el producto es una SPA Vite/React + TanStack y una API NestJS/PostgreSQL.
 
 ## Fuente de verdad
 
@@ -27,6 +27,6 @@ Desde la raíz del workspace, seguir las instrucciones de [`../README.md`](../RE
 
 ## Adaptación a otro proyecto
 
-Este framework está adaptado a La Racha. Antes de reutilizarlo en otro producto, seguir [`ADAPTING.md`](./ADAPTING.md) y actualizar contexto, tokens, contratos y parámetros de skills en conjunto.
+Este framework está adaptado a Rompe la Racha. Antes de reutilizarlo en otro producto, seguir [`ADAPTING.md`](./ADAPTING.md) y actualizar contexto, tokens, contratos y parámetros de skills en conjunto.
 
 Licencia MIT. Autor: [Pedro Araya Gálvez](https://github.com/peteraraya).

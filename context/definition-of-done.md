@@ -2,7 +2,7 @@
 
 Checklist único que el `orchestrator` usa para cerrar una feature o tarea como completa. Ninguna feature se marca `completa` en `/specs/[feature].md` si no cumple lo aplicable a su alcance. No todo ítem aplica a toda tarea (un fix puntual no pasa por `designer`), pero cuando aplica, es obligatorio — no una sugerencia.
 
-> Adaptado a La Racha: frontend SPA con Vite + React + TanStack y backend NestJS/PostgreSQL con API propia (ver `/context/project-context.md`). Aplica las secciones que correspondan al alcance.
+> Adaptado a Rompe la Racha: frontend SPA con Vite + React + TanStack y backend NestJS/PostgreSQL con API propia (ver `/context/project-context.md`). Aplica las secciones que correspondan al alcance.
 
 ## Datos y servicios externos (si aplica)
 
@@ -35,7 +35,7 @@ Checklist único que el `orchestrator` usa para cerrar una feature o tarea como 
 - [ ] Contraste WCAG AA verificado, no asumido
 - [ ] Todo elemento interactivo alcanzable por teclado con foco visible
 - [ ] Ningún estado/información crítica comunicada solo por color
-- [ ] Se usan los tokens de La Racha definidos en `/context/design-tokens.md`; ningún dato crítico depende solo del color
+- [ ] Se usan los tokens de Rompe la Racha definidos en `/context/design-tokens.md`; ningún dato crítico depende solo del color
 - [ ] Especificación con valores exactos (no "un poco más de espacio") entregada a `frontend`
 
 ## Testing (siempre, salvo excepción explícita del usuario)

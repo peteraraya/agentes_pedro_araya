@@ -2,7 +2,7 @@
 
 Usada por el `orchestrator` al iniciar una feature multi-agente, y por `designer`/`frontend` al definir el punto de partida de un handoff (ver `/context/handoff-protocol.md`). Copia esta plantilla a un nuevo archivo por feature dentro de `/specs` (ej. `/specs/checkout-flow.md`) y complétala antes de asignar trabajo a los agentes.
 
-> Para La Racha, consulta `/context/project-context.md`. Cuando una feature añade o modifica datos propios, `backend` define el contrato de `/api/v1` y lo documenta en `/specs/api/`; `frontend` consume los schemas compartidos de `packages/shared-types`. Si no hay datos/API, indícalo expresamente.
+> Para Rompe la Racha, consulta `/context/project-context.md`. Cuando una feature añade o modifica datos propios, `backend` define el contrato de `/api/v1` y lo documenta en `/specs/api/`; `frontend` consume los schemas compartidos de `packages/shared-types`. Si no hay datos/API, indícalo expresamente.
 
 ---
 

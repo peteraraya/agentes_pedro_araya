@@ -2,7 +2,7 @@
 
 Proceso operativo para cuando algo falla en producción. Complementa la teoría de resiliencia de `cicd-expert-pipelines` con el **procedimiento real de quién hace qué, en qué orden**, coordinado por `orchestrator`.
 
-> Adaptado a La Racha: frontend SPA (Vite/React), API NestJS y PostgreSQL. El despliegue de producción aún no está definido; no asumas Vercel ni Kubernetes. Los incidentes de API, base de datos e infraestructura corresponden a `backend`.
+> Adaptado a Rompe la Racha: frontend SPA (Vite/React), API NestJS y PostgreSQL. El despliegue de producción aún no está definido; no asumas Vercel ni Kubernetes. Los incidentes de API, base de datos e infraestructura corresponden a `backend`.
 
 ## Principio rector
 

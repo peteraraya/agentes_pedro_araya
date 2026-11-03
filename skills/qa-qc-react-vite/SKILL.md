@@ -1,17 +1,17 @@
 ---
 name: qa-qc-react-vite
-description: Estrategia de testing del monorepo La Racha: Vitest, React Testing Library para Vite/React y tests unitarios/integración de NestJS y contratos compartidos. Úsala al escribir o revisar tests, definir cobertura o estrategia de testing, o cuando se pida evitar regresiones.
+description: Estrategia de testing del monorepo Rompe la Racha: Vitest, React Testing Library para Vite/React y tests unitarios/integración de NestJS y contratos compartidos. Úsala al escribir o revisar tests, definir cobertura o estrategia de testing, o cuando se pida evitar regresiones.
 ---
 
 # Testing — Web Vite/React (Vitest + RTL)
 
-Estrategia de testing para el monorepo La Racha: web Vite/React, API propia NestJS y contratos Zod compartidos. Prioriza pruebas unitarias e integración deterministas; usa E2E para flujos críticos cuando la infraestructura esté disponible.
+Estrategia de testing para el monorepo Rompe la Racha: web Vite/React, API propia NestJS y contratos Zod compartidos. Prioriza pruebas unitarias e integración deterministas; usa E2E para flujos críticos cuando la infraestructura esté disponible.
 
-## Parámetros del proyecto — La Racha
+## Parámetros del proyecto — Rompe la Racha
 
 > Los únicos valores específicos de esta skill. Al adaptar a otro proyecto se editan estos parámetros (y los archivos de `/context` que referencian), no el cuerpo de la skill.
 
-| Parámetro | Valor actual (`La Racha`) |
+| Parámetro | Valor actual (`Rompe la Racha`) |
 |---|---|
 | Aplicación | Monorepo npm: Vite/React, NestJS, Prisma y PostgreSQL |
 | Contrato | Schemas Zod de `packages/shared-types` |

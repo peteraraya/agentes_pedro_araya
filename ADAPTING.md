@@ -1,6 +1,6 @@
 # ADAPTING.md — Guía de adaptación a otro proyecto
 
-> **Adaptación actualizada:** este workspace ya está configurado para La Racha. Este documento conserva la guía para futuras adaptaciones; no uses las instrucciones de `react-base-app` como contexto del proyecto actual. La fuente de verdad vigente es [`context/project-context.md`](context/project-context.md), junto con `specs/la-racha-mvp.md` y `specs/api/la-racha.md`.
+> **Adaptación actualizada:** este workspace ya está configurado para Rompe la Racha. Este documento conserva la guía para futuras adaptaciones; no uses las instrucciones de `react-base-app` como contexto del proyecto actual. La fuente de verdad vigente es [`context/project-context.md`](context/project-context.md), junto con `specs/la-racha-mvp.md` y `specs/api/la-racha.md`.
 >
 > La guía siguiente describe el acoplamiento histórico a `react-base-app` y el procedimiento general para futuras adaptaciones.
 

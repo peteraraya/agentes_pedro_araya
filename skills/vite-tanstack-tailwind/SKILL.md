@@ -1,17 +1,17 @@
 ---
 name: vite-tanstack-tailwind
-description: Guía técnica del stack Vite + React + TanStack Router/Query y API NestJS del proyecto La Racha. Úsala siempre que la tarea implique ruteo, consultas al servidor, formularios, configuración de build, o estilos del cliente web.
+description: Guía técnica del stack Vite + React + TanStack Router/Query y API NestJS del proyecto Rompe la Racha. Úsala siempre que la tarea implique ruteo, consultas al servidor, formularios, configuración de build, o estilos del cliente web.
 ---
 
 # Stack de implementación — Vite + React + TanStack
 
-Referencia técnica del stack actual del monorepo La Racha.
+Referencia técnica del stack actual del monorepo Rompe la Racha.
 
-## Parámetros del proyecto — La Racha
+## Parámetros del proyecto — Rompe la Racha
 
 > Mantén estos valores sincronizados con el proyecto y sus archivos de contexto.
 
-| Parámetro | Valor actual (`La Racha`) |
+| Parámetro | Valor actual (`Rompe la Racha`) |
 |---|---|
 | Arquitectura | SPA Vite/React y API propia NestJS (ver `/context/project-context.md`) |
 | Deploy | Pendiente; no asumir proveedor |

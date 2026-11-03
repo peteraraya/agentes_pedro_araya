@@ -1,4 +1,4 @@
-# Design Tokens — La Racha de los Desempleados
+# Design Tokens — Rompe la Racha
 
 Valores de identidad de marca definidos por el plan de producto. Todo componente nuevo debe usar estos tokens y mantener accesibilidad WCAG 2.2 AA.
 

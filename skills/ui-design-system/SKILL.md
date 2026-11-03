@@ -7,11 +7,11 @@ description: Criterio de sistema de diseño UI del proyecto actual — reglas de
 
 Los valores exactos (hex, escala, nombres de token) viven en `/context/design-tokens.md` — **fuente de verdad**, no se reinventan acá. Los valores de identidad específicos del proyecto se listan en los **Parámetros del proyecto** (abajo). Esta skill documenta el criterio de uso: qué token corresponde a qué situación, y las reglas que no son negociables al construir o revisar un componente de UI base.
 
-## Parámetros del proyecto — La Racha
+## Parámetros del proyecto — Rompe la Racha
 
 > Los únicos valores específicos de esta skill. Al adaptar a otro proyecto se editan estos parámetros (y `/context/design-tokens.md`), no el cuerpo de la skill.
 
-| Parámetro | Valor actual (`La Racha`) |
+| Parámetro | Valor actual (`Rompe la Racha`) |
 |---|---|
 | Paleta | Naranja principal, azul secundario, amarillo y menta según `/context/design-tokens.md` |
 | Colores semánticos | Usa los tokens de estado definidos en `/context/design-tokens.md` |

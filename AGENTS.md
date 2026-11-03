@@ -1,6 +1,6 @@
-# AGENTS.md — Punto de entrada de La Racha
+# AGENTS.md — Punto de entrada de Rompe la Racha
 
-Este directorio contiene el framework de trabajo del producto La Racha de los Desempleados. La aplicación está en la raíz del workspace; lee la documentación de contexto antes de modificar código.
+Este directorio contiene el framework de trabajo del producto Rompe la Racha. La aplicación está en la raíz del workspace; lee la documentación de contexto antes de modificar código.
 
 ## Orden de lectura
 

@@ -1,4 +1,4 @@
-# Índice de skills — La Racha
+# Índice de skills — Rompe la Racha
 
 Las skills describen métodos especializados; el producto y los valores concretos viven en [`context/`](../context/project-context.md). Activa solo las que corresponden al cambio.
 

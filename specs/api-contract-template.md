@@ -2,7 +2,7 @@
 
 Formaliza como artefacto publicado y versionado el contrato de la API propia para que frontend y QA lo consulten junto con los schemas compartidos. Copia esta plantilla a `/specs/api/[recurso].md` por cada recurso/endpoint nuevo o modificado.
 
-> Para La Racha, `backend` define el contrato de la API NestJS y `frontend` consume los schemas de `packages/shared-types`.
+> Para Rompe la Racha, `backend` define el contrato de la API NestJS y `frontend` consume los schemas de `packages/shared-types`.
 
 ## Por qué existe esto además del schema Zod
 

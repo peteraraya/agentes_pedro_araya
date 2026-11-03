@@ -1,4 +1,4 @@
-# API La Racha — MVP
+# API Rompe la Racha — MVP
 
 **Base path**: `/api/v1`  
 **Dueño**: backend  
@@ -12,7 +12,7 @@ Las rutas devuelven `{ statusCode, message, error? }`; errores de validación so
 
 ### `GET /public/profiles?q=&country=&category=&keyword=&cursor=&limit=`
 
-Sin autenticación. `200 { items: PublicProfile[], nextCursor: string | null }`. Solo perfiles con visibilidad `PUBLIC`, consentimiento de publicación concedido, usuario activo y racha activa. `limit` máximo 24. `category` filtra la categoría profesional; se puede repetir `keyword` hasta 10 veces y los resultados coinciden con al menos una palabra clave seleccionada. Los filtros se combinan entre sí.
+Sin autenticación. `200 { items: PublicProfile[], nextCursor: string | null }`. Solo perfiles con visibilidad `PUBLIC`, no pausados, consentimiento de publicación concedido, usuario activo y racha activa. `limit` máximo 24. `category` filtra la categoría profesional; se puede repetir `keyword` hasta 10 veces y los resultados coinciden con al menos una palabra clave seleccionada. Los filtros se combinan entre sí. Los resultados se ordenan por una rotación semanal estable dentro del conjunto filtrado; el cursor opaco conserva el ancla y el tramo de la rotación para evitar duplicados al paginar. El orden de la vitrina no usa días de racha ni popularidad. Los perfiles incluidos en cada respuesta incrementan un conteo agregado por perfil y día; no se guardan identificadores de visitantes.
 
 ### `GET /public/profiles/:slug`
 
@@ -20,11 +20,15 @@ Sin autenticación. `200 PublicProfile`; `404` para slug inexistente, privado o 
 
 ### `GET /public/ranking?limit=10`
 
-Sin autenticación. `200 { items: RankedProfile[] }`. Solo perfiles públicos con `showInRanking=true`; límite máximo 10. Cifra de días omitida si `showStreakCount=false`.
+Sin autenticación. `200 { items: PublicProfile[] }`. Solo perfiles públicos con `showInRanking=true`; límite máximo 10. Los perfiles rotan semanalmente en orden estable por slug dentro del conjunto opt-in; el orden no usa duración, popularidad ni posición competitiva. Cifra de días omitida si `showStreakCount=false`.
 
 ### `GET /public/stats`
 
-Sin autenticación. `200 { publicProfiles: number }`; solo cuenta perfiles visibles con consentimiento vigente.
+Sin autenticación. `200 { publicProfiles: number }`; solo cuenta perfiles visibles, no pausados y con consentimiento vigente.
+
+### `POST /public/profiles/:slug/reports`
+
+Sin autenticación. Límite de 3 reportes por hora. Body `{ reason, details? }`, donde `reason` es `SCAM`, `DISCRIMINATION`, `INAPPROPRIATE`, `MISLEADING` u `OTHER`; `details` admite hasta 1000 caracteres. Solo acepta perfiles públicos y activos. Responde `201 { accepted: true }`; no registra identidad ni dirección IP del visitante.
 
 ## Autenticación
 
@@ -48,7 +52,21 @@ Bearer JWT requerido. `200 { user, profile, streak }`; `401` si falta o expiró 
 
 ### `GET/PATCH /me/profile`
 
-Devuelve el perfil privado. PATCH acepta `displayName`, `displayMode`, `headline`, `bio`, `country`, `city`, `industry`, `keywords`, `linkedinUrl`, `visibility`, `showInRanking`, `showStreakCount`. `keywords` acepta hasta 10 términos de 40 caracteres y se normaliza sin distinguir mayúsculas. `visibility=PUBLIC` requiere consentimiento concedido; `200` devuelve el perfil propio sin credenciales.
+Devuelve el perfil privado. PATCH acepta `displayName`, `displayMode`, `headline`, `bio`, `country`, `city`, `industry`, `keywords`, `linkedinUrl`, `visibility`, `showInRanking`, `showStreakCount`. `keywords` acepta hasta 10 términos de 40 caracteres y se normaliza sin distinguir mayúsculas. `visibility=PUBLIC` requiere consentimiento concedido; `200` devuelve el perfil propio sin credenciales, incluyendo `isPaused` y `availabilityConfirmedAt`.
+
+### `PATCH /me/profile/availability`
+
+Body `{ isPaused: boolean }`. Requiere perfil público. Pausar lo excluye de la vitrina, estadísticas y Hall. Reactivar registra la confirmación de disponibilidad; no vuelve a inscribir en el Hall.
+
+### `POST /me/profile/availability/confirm`
+
+Requiere perfil público. Actualiza la fecha de confirmación y reinicia el ciclo de recordatorio; no reactiva perfiles pausados.
+
+La API envía un recordatorio de disponibilidad cada 60 días a perfiles públicos no pausados con cuenta verificada y racha activa. No pausa perfiles automáticamente.
+
+### Rutas administrativas `/admin/fairness`
+
+Requieren sesión activa y rol `ADMIN` validado contra la base de datos. `GET /reports?status=OPEN` lista hasta 100 reportes; `PATCH /reports/:id` acepta `status` (`REVIEWED`, `ACTIONED` o `DISMISSED`), `resolutionNote` y `pauseProfile` (solo junto a `ACTIONED`). `GET /exposure` devuelve conteos agregados de respuestas del directorio por perfil para los últimos 30 días, sin visitantes identificables.
 
 ### `PUT /me/streak`
 
@@ -70,4 +88,4 @@ Elimina la cuenta autenticada y sus datos asociados; `204`. No acepta IDs de usu
 
 `PublicProfile = { slug, displayName, displayMode, headline, bio, country, city, avatarUrl, industry, keywords, linkedinUrl, showStreakCount, streak?: { days, startDate, selfDeclared: true } }`.
 
-`RankedProfile` es `PublicProfile` sin enlaces externos opcionales. No incluir email, `userId`, fecha de nacimiento o estado de verificación.
+El contrato de perfiles del Hall es `PublicProfile`. No incluir email, `userId`, fecha de nacimiento o estado de verificación.
